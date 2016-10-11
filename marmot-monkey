@@ -1,0 +1,23 @@
+#!/bin/bash
+if [ $1x == "cbfx" ]
+then
+	docker exec monkey-phpfpm vendor/bin/phpcbf
+elif [ $1x == "csx" ]
+then
+	docker exec monkey-phpfpm vendor/bin/phpcs --report-full
+elif [ $1x == "cpdx" ]
+then
+	docker exec monkey-phpfpm vendor/bin/phpcpd Application
+elif [ $1x == "unitx" ]
+then
+	docker exec monkey-phpfpm vendor/bin/phpunit --testsuite="Application" --stop-on-failure
+elif [ $1x == "unitFilex" ]
+then
+	docker exec monkey-phpfpm vendor/bin/phpunit --filter="$2"
+else
+	echo "cbf: 修改代码格式"
+	echo "cs: 检测代码格式"
+	echo "cpd: 复制黏贴检测"
+	echo "unit: 单元测试"
+	echo "unitFile: 运行单个单元测试文件 unitFile xxxx(文件名,不用添加后缀.php)"
+fi

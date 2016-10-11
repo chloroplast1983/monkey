@@ -31,6 +31,10 @@ abstract class User
      * @var string $userName 用户名预留字段
      */
     protected $userName;
+    /**
+     * @var string $password 用户密码
+     */
+    protected $password;
 
     public function __construct(int $id = 0)
     {
@@ -38,6 +42,7 @@ abstract class User
         $this->cellPhone = '';
         $this->nickName = '';
         $this->userName = '';
+        $this->password = '';
         $this->createTime = 0;
         $this->updateTime = 0;
         $this->status = 0;
@@ -50,6 +55,7 @@ abstract class User
         unset($this->cellPhone);
         unset($this->nickName);
         unset($this->userName);
+        unset($this->password);
         unset($this->createTime);
         unset($this->updateTime);
         unset($this->status);
@@ -79,7 +85,7 @@ abstract class User
      * 设置用户手机号码
      * @param string $cellPhone
      */
-    public function setCellPhone($cellPhone)
+    public function setCellPhone(string $cellPhone)
     {
         $this->cellPhone = is_numeric($cellPhone) ? $cellPhone : '';
     }

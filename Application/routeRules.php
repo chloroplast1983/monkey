@@ -6,7 +6,7 @@
 return [
     
     //users
-	//保存用户页面
+    //保存用户页面
     [
         'method'=>'GET',
         'rule'=>'/Users/Save[/{id:\d+}]',

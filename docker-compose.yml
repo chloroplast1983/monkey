@@ -16,7 +16,6 @@ phpfpm:
   links:
    - "memcached-1:memcached_1"
    - "memcached-2:memcached_2"
-  external_links:
    - "mysql-master:dbw"
   container_name: monkey-phpfpm
 
@@ -30,3 +29,20 @@ memcached-2:
   command: memcached -m 32
   container_name: monkey-memcached2
 
+mysql-master:
+  image: "registry.aliyuncs.com/marmot/mysql:5.6"
+  volumes:
+  - ~/data/mysql/:/var/lib/mysql
+  environment:
+   - MYSQL_ROOT_PASSWORD=123456
+  container_name: monkey-mysql-master
+
+phpmyadmin:
+  image: "registry.aliyuncs.com/marmot/phpmyadmin"
+  links:
+   - "mysql-master:mysql"
+  ports:
+   - "10081:80"
+  environment:
+   - UPLOAD_SIZE=1G
+  container_name: monkey-phpmyadmin
