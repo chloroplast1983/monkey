@@ -3,6 +3,8 @@ namespace Member\Command\User;
 
 use System\Interfaces\ICommand;
 
+//test
+
 class SignUpUserCommand implements ICommand
 {
     /**

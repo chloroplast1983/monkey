@@ -27,7 +27,6 @@ class UserAdapter implements IUserAdapter
     public function getOne(int $id)
     {
         if (!empty($id)) {
-
             $response = $this->client->request(
                 'GET',
                 $id,
@@ -57,7 +56,6 @@ class UserAdapter implements IUserAdapter
     public function getList(string $ids)
     {
         if (!empty($id)) {
-
             $response = $this->client->request(
                 'GET',
                 $ids,
@@ -80,7 +78,7 @@ class UserAdapter implements IUserAdapter
                     foreach ($dataList as $data) {
                         $userList[] = $this->translator->arrayToObject($data['attributes']);
                     }
-                }            
+                }
             }
             return $userList;
         }

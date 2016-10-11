@@ -75,6 +75,6 @@ class ApplicationTranslator extends Translator
             $expression['statusTime'] = $user->getStatusTime();
         }
 
-    	return $expression;
+        return $expression;
     }
 }

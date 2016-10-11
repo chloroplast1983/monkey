@@ -30,13 +30,15 @@ class User extends AbstractUser
      * @return bool 是否注册成功
      */
     public function signUp() : bool
-    {   
-        $adapter = new UserAdapter();
-        return $adapter->signUp($this, array(
-                    'cellPhone',
-                    'password',
-                    'userName'
-                ));
+    {
+        $this->setId(2);
+        return true;
+        // $adapter = new UserAdapter();
+        // return $adapter->signUp($this, array(
+        //             'cellPhone',
+        //             'password',
+        //             'userName'
+        //         ));
     }
 
     /**
@@ -45,5 +47,7 @@ class User extends AbstractUser
      */
     public function updatePassword() : bool
     {
+        //oldpassword
+        //password
     }
 }

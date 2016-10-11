@@ -131,6 +131,27 @@ abstract class User
     }
 
     /**
+     * 设置用户密码
+     *
+     * @param string $password 用户密码
+     * @param string $salt 盐
+     */
+    public function setPassword(string $password)
+    {
+        $this->password = $password;
+    }
+
+    /**
+     * Gets the value of password.
+     *
+     * @return string $password 用户密码
+     */
+    public function getPassword() : string
+    {
+        return $this->password;
+    }
+    
+    /**
      * 注册
      */
     abstract public function signUp() : bool;

@@ -3,6 +3,7 @@
 return [
     //core class
     'System\Classes\Cache' => S_ROOT.'System/Classes/Cache.class.php',
+    'System\Classes\CommandBus' => S_ROOT.'System/Classes/CommandBus.class.php',
     'System\Classes\Db'     => S_ROOT.'System/Classes/Db.class.php',
     'System\Classes\MyPdo' => S_ROOT.'System/Classes/MyPdo.class.php',
     'System\Classes\Transaction' => S_ROOT.'System/Classes/Transaction.class.php',
@@ -20,6 +21,9 @@ return [
     'System\Interfaces\Widget' => S_ROOT.'System/Interfaces/Widget.class.php',
     'System\Interfaces\CacheLayer' => S_ROOT.'System/Interfaces/CacheLayer.class.php',
     'System\Interfaces\DbLayer' => S_ROOT.'System/Interfaces/DbLayer.class.php',
+    'System\Interfaces\ICommand' => S_ROOT.'System/Interfaces/ICommand.class.php',
+    'System\Interfaces\ICommandHandler' => S_ROOT.'System/Interfaces/ICommandHandler.class.php',
+    'System\Interfaces\ICommandHandlerFactory' => S_ROOT.'System/Interfaces/ICommandHandlerFactory.class.php',
 
     //command
     'System\Command\Cache\SaveCacheCommand' => S_ROOT.'System/Command/Cache/SaveCacheCommand.class.php',

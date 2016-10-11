@@ -2,7 +2,7 @@
 namespace System\Interfaces;
 
 /**
- * 命令模式接口
+ * 命令模式接口,内部使用
  *
  * @codeCoverageIgnore
  *
