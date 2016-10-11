@@ -1,5 +1,20 @@
 #!/bin/bash
-if [ $1x == "cbfx" ]
+if [ $1x == "startx" ]
+then
+	docker-compose up -d
+elif [ $1x == "stopx" ]
+then
+	docker-compose stop
+elif [ $1x == "upgradex" ]
+then
+	docker-compose stop
+	docker-compose pull
+	if [ $? -ne 0 ]
+	then 
+	docker-compose rm -f
+	fi
+	docker-compose up -d
+elif [ $1x == "cbfx" ]
 then
 	docker exec monkey-phpfpm vendor/bin/phpcbf
 elif [ $1x == "csx" ]
@@ -15,6 +30,9 @@ elif [ $1x == "unitFilex" ]
 then
 	docker exec monkey-phpfpm vendor/bin/phpunit --filter="$2"
 else
+	echo "start: 启动服务"
+	echo "stop: 关闭服务"
+	echo "upgrade 更新环境"
 	echo "cbf: 修改代码格式"
 	echo "cs: 检测代码格式"
 	echo "cpd: 复制黏贴检测"

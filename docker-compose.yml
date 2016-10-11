@@ -30,7 +30,7 @@ memcached-2:
   container_name: monkey-memcached2
 
 mysql-master:
-  image: "registry.aliyuncs.com/marmot/mysql:5.6"
+  image: "registry.cn-hangzhou.aliyuncs.com/marmot/mysql-5.6:1.0"
   volumes:
   - ~/data/mysql/:/var/lib/mysql
   environment:
