@@ -7,15 +7,16 @@ use Marmot\Core;
 
 use Member\Repository\User\UserRepository;
 
+use Common\Controller\CsrfTokenTrait;
+
 class IndexController extends Controller
 {
     use CaptchaTrait;
+    use CsrfTokenTrait;
 
     public function index()
     {
-
-        var_dump($this->validateCaptcha('wkxc11'));
-        exit();
+        //var_dump($this->validateCsrfToken('XCrcx6zrtu8cUiJmBU1JjHly7qRHalZYPgzdyhDe'));exit();
         //var_dump($_SESSION['phrase']);exit();
         //exit();
 //        if ($this->getRequest()->isAjax())

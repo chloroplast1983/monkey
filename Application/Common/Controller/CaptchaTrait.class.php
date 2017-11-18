@@ -1,13 +1,12 @@
 <?php
 namespace Common\Controller;
 
-use Common\Persistence\UtilsSession;
+use Common\Utils\Captcha;
 
 trait CaptchaTrait {
 
-    protected function validateCaptcha(string $phrase)
+    public function validateCaptcha(string $phrase) : bool
     {
-        $session = new UtilsSession();
-        return $phrase == $session->get('captcha');
+        return Captcha::validate($phrase);
     }
 }

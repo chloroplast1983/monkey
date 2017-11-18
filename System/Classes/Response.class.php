@@ -14,6 +14,7 @@ class Response
         $this->view->setTemplateDir(S_ROOT.'View/Smarty/Templates');
         $this->view->setCompileDir(S_ROOT.'View/Smarty/Compile');
         $this->view->setCacheDir(S_ROOT.'View/Smarty/Cache');
+        $this->view->setPluginsDir(S_ROOT.'View/Smarty/Plugins');
     }
 
     public function view()
