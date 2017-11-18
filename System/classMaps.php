@@ -20,6 +20,7 @@ return [
     'System\Adapter\Restful\GuzzleConcurrentAdapter' =>
     S_ROOT.'System/Adapter/Restful/GuzzleConcurrentAdapter.class.php',
     'System\Adapter\Restful\GuzzleAdapter' => S_ROOT.'System/Adapter/Restful/GuzzleAdapter.class.php',
+    'System\Adapter\Restful\NullResponse' => S_ROOT.'System/Adapter/Restful/NullResponse.class.php',
 
     //command
     'System\Command\Cache\SaveCacheCommand' => S_ROOT.'System/Command/Cache/SaveCacheCommand.class.php',

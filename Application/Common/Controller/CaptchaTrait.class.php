@@ -3,7 +3,8 @@ namespace Common\Controller;
 
 use Common\Utils\Captcha;
 
-trait CaptchaTrait {
+trait CaptchaTrait
+{
 
     public function validateCaptcha(string $phrase) : bool
     {

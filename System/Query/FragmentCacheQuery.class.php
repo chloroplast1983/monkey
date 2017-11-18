@@ -53,7 +53,7 @@ abstract class FragmentCacheQuery
 
         $cacheData = $this->refresh();
         if (!$cacheData) {
-            return false;
+            return '';
         }
 
         return $cacheData;

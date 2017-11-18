@@ -41,15 +41,17 @@ class GuzzleConcurrentAdapter
 
         $responses = array();
         foreach ($this->getPromises() as $key => $promise) {
-            $response = $results[$key]['value'];
-            $adapter = $this->getAdapters()[$key];
-            $responses[$key] = call_user_func_array(
-                array(
-                    $this->getAdapters()[$key],
-                    'handleAsync'
-                ),
-                $this->formatResponse($response)
-            );
+            if (isset($results[$key]['value'])) {
+                $response = $results[$key]['value'];
+                $adapter = $this->getAdapters()[$key];
+                $responses[$key] = call_user_func_array(
+                    array(
+                        $this->getAdapters()[$key],
+                        'handleAsync'
+                    ),
+                    $this->formatResponse($response)
+                );
+            }
         }
         return $responses;
     }

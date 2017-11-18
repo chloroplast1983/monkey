@@ -3,6 +3,7 @@ namespace Member\Translator;
 
 use System\Classes\Translator;
 use Member\Model\User;
+use Member\Model\NullUser;
 
 class UserRestfulTranslator extends Translator
 {
@@ -16,6 +17,7 @@ class UserRestfulTranslator extends Translator
 
             return $results;
         }
+
         return [$expression['data']['id']=>$this->arrayToSingleObject($expression)];
     }
 

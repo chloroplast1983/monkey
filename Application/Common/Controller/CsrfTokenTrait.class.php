@@ -7,7 +7,7 @@ trait CsrfTokenTrait
 {
     private function validateCsrfToken() : bool
     {
-       return $this->validateBodyToken() || $this->validateHeaderToken();
+        return $this->validateBodyToken() || $this->validateHeaderToken();
     }
 
     private function validateBodyToken() : bool

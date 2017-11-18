@@ -2,6 +2,7 @@
 namespace System\Adapter\Restful;
 
 use GuzzleHttp;
+use GuzzleHttp\Exception\RequestException;
 
 abstract class GuzzleAdapter
 {
@@ -24,7 +25,7 @@ abstract class GuzzleAdapter
             [
              'base_uri'=>$baseurl,
              'http_errors'=>false,
-             'timeout'=>10.0
+             'timeout'=>0.1
             ]
         );
 
@@ -63,7 +64,7 @@ abstract class GuzzleAdapter
 
     protected function getContents() : array
     {
-        return json_decode($this->contents, true);
+        return !empty($this->contents) ? json_decode($this->contents, true) : array();
     }
 
     protected function setRequestHeaders(array $requestHeaders) : void
@@ -93,13 +94,18 @@ abstract class GuzzleAdapter
 
         $this->clearScenario();
     
-        $response = $this->getClient()->get(
-            $url,
-            [
-                'headers'=>$requestHeaders,
-                'query'=>$query
-            ]
-        );
+        try {
+            $response = $this->getClient()->get(
+                $url,
+                [
+                    'headers'=>$requestHeaders,
+                    'query'=>$query
+                ]
+            );
+        } catch (RequestException $e) {
+            //log
+            $response = new NullResponse();
+        }
         $this->formatResponse($response);
     }
 
@@ -122,13 +128,19 @@ abstract class GuzzleAdapter
     protected function put(string $url, array $data = array(), array $requestHeaders = array())
     {
         $requestHeaders = array_merge($requestHeaders, $this->getRequestHeaders());
-        $response = $this->getClient()->put(
-            $url,
-            [
-                'headers'=>$requestHeaders,
-                'json'=>$data
-            ]
-        );
+
+        try {
+            $response = $this->getClient()->put(
+                $url,
+                [
+                    'headers'=>$requestHeaders,
+                    'json'=>$data
+                ]
+            );
+        } catch (RequestException $e) {
+            //log
+            $response = new NullResponse();
+        }
         $this->formatResponse($response);
     }
 
@@ -137,25 +149,36 @@ abstract class GuzzleAdapter
         $contentTypeHeader = ['Content-Type' => 'application/vnd.api+json'];
         $requestHeaders = array_merge_recursive($requestHeaders, $this->getRequestHeaders(), $contentTypeHeader);
 
-        $response = $this->getClient()->post(
-            $url,
-            [
-                'headers'=>$requestHeaders,
-                'json'=>$data
-            ]
-        );
+        try {
+            $response = $this->getClient()->post(
+                $url,
+                [
+                    'headers'=>$requestHeaders,
+                    'json'=>$data
+                ]
+            );
+        } catch (RequestException $e) {
+            //log
+            $response = new NullResponse();
+        }
         $this->formatResponse($response);
     }
 
     protected function delete(string $url, array $requestHeaders = array())
     {
         $requestHeaders = array_merge($requestHeaders, $this->getRequestHeaders());
-        $response = $this->getClient()->delete(
-            $url,
-            [
-                'headers'=>$requestHeaders
-            ]
-        );
+
+        try {
+            $response = $this->getClient()->delete(
+                $url,
+                [
+                    'headers'=>$requestHeaders
+                ]
+            );
+        } catch (RequestException $e) {
+            //log
+            $response = new NullResponse();
+        }
         $this->formatResponse($response);
     }
 

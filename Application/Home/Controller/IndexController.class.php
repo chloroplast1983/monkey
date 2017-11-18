@@ -26,10 +26,13 @@ class IndexController extends Controller
         //var_dump(Core::$container->get('user'));
         //exit();
         //var_dump(\Common\Utils\Mask::mask('1234142114',2,3));exit();
-//        $latestUsersCache = new \Member\Cache\LatestUsersFragmentCache();
+        //$latestUsersCache = new \Member\Cache\LatestUsersFragmentCache();
+        //$latestUsersCache->refresh();
+        //exit();
  //       $data = $latestUsersCache->get();
         $repository = new UserRepository();
         $data = $repository->scenario(UserRepository::LIST_MODEL_UN)->fetchOne(1);
+        var_dump($data);
 
         //$adapter = new UserRestfulAdapter();
       //  $userOne = $adapter->fetchList(array(2,3));
