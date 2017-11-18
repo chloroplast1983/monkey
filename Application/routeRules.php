@@ -4,6 +4,16 @@
  * 路由设置
  */
 return [
+    //工具
+    //验证码图片
+    [
+        'method'=>'GET',
+        'rule'=>'/utils/captcha',
+        'controller'=>[
+            'Common\Controller\UtilsController',
+            'captcha'
+        ],
+    ],
     //user 用户
     //获取用户详情接口
     [

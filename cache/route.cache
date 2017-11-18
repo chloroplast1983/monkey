@@ -8,6 +8,11 @@
         0 => 'Home\\Controller\\IndexController',
         1 => 'index',
       ),
+      '/utils/captcha' => 
+      array (
+        0 => 'Common\\Controller\\UtilsController',
+        1 => 'captcha',
+      ),
       '/users' => 
       array (
         0 => 'Member\\Controller\\UserController',

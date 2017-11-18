@@ -1,7 +1,7 @@
 <?php
 namespace System\Classes;
 
-class Session
+abstract class Session
 {
     private $key;
 
