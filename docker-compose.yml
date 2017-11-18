@@ -1,48 +1,43 @@
 nginx: 
-  image: "registry.cn-hangzhou.aliyuncs.com/marmot/nginx-phpfpm-saas:1.0"
+  image: "registry.cn-hangzhou.aliyuncs.com/nginx-phpfpm/nginx-front"
   ports:
    - "80:80"
   links:
    - "phpfpm"
   volumes:
-   - ~/data/html/monkey:/var/www/html/
-   - ~/log/nginx/monkey:/var/log/nginx
+   - ./:/var/www/html/
   container_name: monkey-nginx
 
 phpfpm:
-  image: "registry.cn-hangzhou.aliyuncs.com/marmot/phpfpm-7.0:1.0"
+  image: "registry.cn-hangzhou.aliyuncs.com/phpfpm/phpfpm-front:dev.latest"
   volumes:
-   - ~/data/html/monkey:/var/www/html/
+   - ./:/var/www/html/
   links:
-   - "memcached-1:memcached_1"
-   - "memcached-2:memcached_2"
-   - "mysql-master:dbw"
+    - "memcached_session_1"
+    - "memcached_session_2"
+    - "memcached_data_1"
+    - "memcached_data_2"
+  external_links:
+   - "marmot-nginx:marmot-backend"
+  environment:
+   - APP_ENV=dev
+  cap_add:
+    - SYS_PTRACE
   container_name: monkey-phpfpm
 
-memcached-1:
+memcached_session_1:
   image: "registry.aliyuncs.com/marmot/memcached:1.0"
   command: memcached -m 32
-  container_name: monkey-memcached1
 
-memcached-2:
+memcached_session_2:
   image: "registry.aliyuncs.com/marmot/memcached:1.0"
   command: memcached -m 32
-  container_name: monkey-memcached2
 
-mysql-master:
-  image: "registry.cn-hangzhou.aliyuncs.com/marmot/mysql-5.6:1.0"
-  volumes:
-  - ~/data/mysql/:/var/lib/mysql
-  environment:
-   - MYSQL_ROOT_PASSWORD=123456
-  container_name: monkey-mysql-master
+memcached_data_1:
+  image: "registry.aliyuncs.com/marmot/memcached:1.0"
+  command: memcached -m 32
 
-phpmyadmin:
-  image: "registry.aliyuncs.com/marmot/phpmyadmin"
-  links:
-   - "mysql-master:mysql"
-  ports:
-   - "10081:80"
-  environment:
-   - UPLOAD_SIZE=1G
-  container_name: monkey-phpmyadmin
+memcached_data_2:
+  image: "registry.aliyuncs.com/marmot/memcached:1.0"
+  command: memcached -m 32
+

@@ -3,7 +3,6 @@ namespace Member\Model;
 
 use Marmot\Core;
 use User\Model\User as AbstractUser;
-use Member\Model\UserAdapter;
 
 /**
  * 用户领域对象
@@ -13,16 +12,22 @@ use Member\Model\UserAdapter;
 
 class User extends AbstractUser
 {
+    const STATUS_NORMAL = 0;
+    const STATUS_DELETE = -2;
 
     /**
      * 设置用户状态
      * @param int $status 用户状态
      */
-    public function setStatus(int $status)
+    public function setStatus(int $status) : void
     {
-        $this->status= in_array($status, array(
-            STATUS_NORMAL,
-            STATUS_DELETE)) ? $status : STATUS_NORMAL;
+        $this->status= in_array(
+            $status,
+            array(
+                self::STATUS_NORMAL,
+                self::STATUS_DELETE
+            )
+        ) ? $status : self::STATUS_NORMAL;
     }
 
     /**
@@ -31,14 +36,7 @@ class User extends AbstractUser
      */
     public function signUp() : bool
     {
-        $this->setId(2);
         return true;
-        // $adapter = new UserAdapter();
-        // return $adapter->signUp($this, array(
-        //             'cellPhone',
-        //             'password',
-        //             'userName'
-        //         ));
     }
 
     /**

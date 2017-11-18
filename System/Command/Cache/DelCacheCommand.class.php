@@ -22,7 +22,7 @@ class DelCacheCommand implements Interfaces\Command
         $this->key = $key;
     }
 
-    public function execute()
+    public function execute() : bool
     {
         return Core::$cacheDriver->delete($this->key);
     }

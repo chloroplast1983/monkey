@@ -4,6 +4,9 @@ namespace System\Classes;
 
 use System\Interfaces\ICommandHandlerFactory;
 use System\Interfaces\ICommand;
+use System\Interfaces\INull;
+
+use Marmot\Core;
 
 /**
  * 命令总线
@@ -11,10 +14,11 @@ use System\Interfaces\ICommand;
  * 2. 发送命令,通过 commandHandlerFactory 获取到适当的 commandHandler
  * 3. 执行 commandHandler
  *
- * @codeCoverageIgnore
  */
 class CommandBus
 {
+    
+    private $transaction;
     
     private $commandHandlerFactory;
 
@@ -23,15 +27,33 @@ class CommandBus
         $this->commandHandlerFactory = $commandHandlerFactory;
     }
 
+    public function __destruct()
+    {
+        unset($this->commandHandlerFactory);
+    }
+
+    protected function getCommandHandlerFactory() : ICommandHandlerFactory
+    {
+        return $this->commandHandlerFactory;
+    }
+
     public function send(ICommand $command)
     {
-        $handler = $this->commandHandlerFactory->getHandler($command);
-
-        if ($handler != null) {
-            return $handler->execute($command);
-        } else {
-            //@todo
-            //exception
+        $handler = $this->getCommandHandlerFactory()->getHandler($command);
+        //这里为了没有必要开启事务
+        if ($handler instanceof INull) {
+            Core::setLastError(COMMAND_HANDLER_NOT_EXIST);
+            return false;
         }
+        
+        if ($handler->execute($command)) {
+            return true;
+        }
+        
+        //log
+        
+        //event
+        //
+        return false;
     }
 }

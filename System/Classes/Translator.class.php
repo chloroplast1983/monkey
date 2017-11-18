@@ -3,8 +3,6 @@ namespace System\Classes;
 
 abstract class Translator
 {
-
     abstract public function arrayToObject(array $expression);
-
-    abstract public function objectToArray($object, array $keys = array());
+    abstract public function objectToArray($object);
 }

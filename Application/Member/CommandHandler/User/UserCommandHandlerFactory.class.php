@@ -18,6 +18,9 @@ class UserCommandHandlerFactory implements ICommandHandlerFactory
             case 'Member\Command\User\SignUpUserCommand':
                 $commandHandler = new SignUpUserCommandHandler();
                 break;
+            case 'Member\Command\User\AuthUserCommand':
+                $commandHandler = new AuthUserCommandHandler();
+                break;
         }
         return $commandHandler;
     }

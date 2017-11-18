@@ -2,7 +2,7 @@
 namespace System\Query;
 
 use System\Classes;
-use System\Interfaces;
+use System\Interfaces\CacheLayer;
 
 /**
  * Query层的片段存处理,需要处理页面中的一个片段.
@@ -14,25 +14,30 @@ use System\Interfaces;
  */
 abstract class FragmentCacheQuery
 {
-
     private $fragmentKey;//片段缓存key名
 
     private $cacheLayer;//缓存层
 
-    private $dbLayer;//数据层
-
-    public function __construct(string $fragmentKey, Interfaces\CacheLayer $cacheLayer, Interfaces\DbLayer $dbLayer)
+    public function __construct(string $fragmentKey, CacheLayer $cacheLayer)
     {
         $this->fragmentKey = $fragmentKey;
         $this->cacheLayer = $cacheLayer;
-        $this->dbLayer = $dbLayer;
     }
 
     public function __destruct()
     {
         unset($this->fragmentKey);
         unset($this->cacheLayer);
-        unset($this->dbLayer);
+    }
+
+    protected function getFragmentKey() : string
+    {
+        return $this->fragmentKey;
+    }
+
+    protected function getCacheLayer() : CacheLayer
+    {
+        return $this->cacheLayer;
     }
 
     /**
@@ -40,9 +45,8 @@ abstract class FragmentCacheQuery
      */
     public function get()
     {
-
         //从缓存获取数据
-        $cacheData = $this->cacheLayer->get($this->fragmentKey);
+        $cacheData = $this->getCacheLayer()->get($this->getFragmentKey());
         if ($cacheData) {
             return $cacheData;
         }
@@ -58,11 +62,17 @@ abstract class FragmentCacheQuery
      * 更新缓存片段
      */
     abstract public function refresh();
+
+    protected function save($data) : bool
+    {
+        return $this->getCacheLayer()->save($this->getFragmentKey(), $data);
+    }
+
     /**
      * 删除片段缓存
      */
-    public function del()
+    public function clear()
     {
-        $this->cacheLayer->del($this->fragmentKey);
+        $this->getCacheLayer()->del($this->getFragmentKey());
     }
 }

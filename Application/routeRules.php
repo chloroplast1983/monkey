@@ -1,27 +1,52 @@
 <?php
 /**
- *
+ * \d+(,\d+)*
  * 路由设置
  */
 return [
-    
-    //users
-    //保存用户页面
+    //user 用户
+    //获取用户详情接口
     [
         'method'=>'GET',
-        'rule'=>'/Users/Save[/{id:\d+}]',
+        'rule'=>'/users/{id:\d+}',
+        'controller'=>[
+            'Member\Controller\UserController',
+            'getOne'
+        ]
+    ],
+    [
+        'method'=>'GET',
+        'rule'=>'/users',
+        'controller'=>[
+            'Member\Controller\UserController',
+            'index'
+        ]
+    ],
+    //注册
+    [
+        'method'=>'POST',
+        'rule'=>'/users',
         'controller'=>[
             'Member\Controller\UserController',
             'signUp'
         ]
     ],
-    //保存提交触发
+    //登录
     [
         'method'=>'POST',
-        'rule'=>'/Users',
+        'rule'=>'/users/signIn',
         'controller'=>[
             'Member\Controller\UserController',
-            'signUp'
+            'signIn'
+        ]
+    ],
+    //修改用户密码
+    [
+        'method'=>'PUT',
+        'rule'=>'/users/{id:\d+}/updatePassword',
+        'controller'=>[
+            'Member\Controller\UserController',
+            'updatePassword'
         ]
     ],
 ];

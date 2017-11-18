@@ -4,9 +4,9 @@ namespace System\Classes;
 
 use Marmot\Core;
 use System\Classes\Filter;
+use System\Interfaces\IValidateStrategy;
 
 /**
- * 这里是基于yii2的request类作的修改,
  * 因为我们只是基于接口作框架处理开发.这里这里只是保留了接口的功能.
  *
  * @author chloroplast
@@ -14,7 +14,6 @@ use System\Classes\Filter;
  */
 class Request
 {
-
     /**
      * @var array query 数组
      */
@@ -30,14 +29,36 @@ class Request
      */
     private $rawBody;
 
-   /**
+    /**
+     * @var $headers
+     */
+    private $headers;
+
+    /**
+     * @var $mediaTypeStrategy IMediaTypeStrategy
+     */
+    private $mediaTypeStrategy;
+
+
+    public function __construct()
+    {
+    }
+
+    public function __destruct()
+    {
+        unset($this->queryParams);
+        unset($this->bodyParams);
+        unset($this->rawBody);
+        unset($this->headers);
+    }
+
+    /**
      * Returns the method of the current request (e.g. GET, POST, HEAD, PUT, PATCH, DELETE).
      * @return string request method, such as GET, POST, HEAD, PUT, PATCH, DELETE.
      * The value returned is turned into upper case.
      */
-    public function getMethod()
+    public function getMethod() : string
     {
-
         if (isset($_SERVER['HTTP_X_HTTP_METHOD_OVERRIDE'])) {
             return strtoupper($_SERVER['HTTP_X_HTTP_METHOD_OVERRIDE']);
         }
@@ -53,7 +74,7 @@ class Request
      * Returns whether this is a GET request.
      * @return boolean whether this is a GET request.
      */
-    public function getIsGet()
+    public function isGetMethod() : bool
     {
         return $this->getMethod() === 'GET';
     }
@@ -61,7 +82,7 @@ class Request
      * Returns whether this is an OPTIONS request.
      * @return boolean whether this is a OPTIONS request.
      */
-    public function getIsOptions()
+    public function isOptionsMethod() : bool
     {
         return $this->getMethod() === 'OPTIONS';
     }
@@ -69,7 +90,7 @@ class Request
      * Returns whether this is a HEAD request.
      * @return boolean whether this is a HEAD request.
      */
-    public function getIsHead()
+    public function isHeadMethod() : bool
     {
         return $this->getMethod() === 'HEAD';
     }
@@ -77,7 +98,7 @@ class Request
      * Returns whether this is a POST request.
      * @return boolean whether this is a POST request.
      */
-    public function getIsPost()
+    public function isPostMethod() : bool
     {
         return $this->getMethod() === 'POST';
     }
@@ -85,7 +106,7 @@ class Request
      * Returns whether this is a DELETE request.
      * @return boolean whether this is a DELETE request.
      */
-    public function getIsDelete()
+    public function isDeleteMethod() : bool
     {
         return $this->getMethod() === 'DELETE';
     }
@@ -93,7 +114,7 @@ class Request
      * Returns whether this is a PUT request.
      * @return boolean whether this is a PUT request.
      */
-    public function getIsPut()
+    public function isPutMethod() : bool
     {
         return $this->getMethod() === 'PUT';
     }
@@ -101,9 +122,18 @@ class Request
      * Returns whether this is a PATCH request.
      * @return boolean whether this is a PATCH request.
      */
-    public function getIsPatch()
+    public function isPatchMethod() : bool
     {
         return $this->getMethod() === 'PATCH';
+    }
+
+    public function isAjax() : bool
+    {
+        if (isset($_SERVER['HTTP_X_REQUESTED_WITH'])
+            && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -138,9 +168,8 @@ class Request
     {
         if ($name === null) {
             return $this->getQueryParams();
-        } else {
-            return $this->getQueryParam($name, $defaultValue);
         }
+        return $this->getQueryParam($name, $defaultValue);
     }
 
     /**
@@ -153,15 +182,14 @@ class Request
     public function post($name = null, $defaultValue = null)
     {
 
-        if (!$this->getIsPost()) {
+        if (!$this->isPostMethod()) {
             return null;
         }
 
         if ($name === null) {
             return $this->getBodyParams();
-        } else {
-            return $this->getBodyParam($name, $defaultValue);
         }
+        return $this->getBodyParam($name, $defaultValue);
     }
 
     /**
@@ -174,15 +202,14 @@ class Request
     public function put($name = null, $defaultValue = null)
     {
 
-        if (!$this->getIsPut()) {
+        if (!$this->isPutMethod()) {
             return null;
         }
 
         if ($name === null) {
             return $this->getBodyParams();
-        } else {
-            return $this->getBodyParam($name, $defaultValue);
         }
+        return $this->getBodyParam($name, $defaultValue);
     }
 
     /**
@@ -239,7 +266,8 @@ class Request
     public function getBodyParams()
     {
         if ($this->bodyParams === null) {
-            if ($this->getMethod() === 'POST') {
+            //兼容HTTP_X_HTTP_METHOD_OVERRIDE
+            if ($this->isPostMethod() || $this->isPutMethod()) {
                 // PHP has already parsed the body so we have all params in $_POST
                 if (!empty($_POST)) {
                     $this->bodyParams = $_POST;
@@ -247,10 +275,6 @@ class Request
                     $this->bodyParams = [];
                     $this->bodyParams = json_decode($this->getRawBody(), true);
                 }
-            } elseif ($this->getMethod() == 'PUT') {
-                // 如果是PUT,我们默认传递发送json数组方便用于解析
-                $this->bodyParams = [];
-                $this->bodyParams = json_decode($this->getRawBody(), true);
             } else {
                 $this->bodyParams = [];
                 mb_parse_str($this->getRawBody(), $this->bodyParams);
@@ -283,17 +307,118 @@ class Request
         return isset($params[$name]) ? $params[$name] : $defaultValue;
     }
 
-    /**
-     * 判断是否 ajax
-     */
-    public function isAjax()
+    private function getHeaders()
     {
-        if (isset($_SERVER['HTTP_X_REQUESTED_WITH'])
-            &&
-            strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+        foreach ($_SERVER as $name => $value) {
+            if (strncmp($name, 'HTTP_', 5) === 0) {
+                $name = str_replace(' ', '-', ucwords(strtolower(str_replace('_', ' ', substr($name, 5)))));
+                $this->headers[strtolower($name)] = $value;
+            }
+        }
+    }
+
+    public function getHeader($name, $default = null)
+    {
+        $this->getHeaders();
+
+        $name = strtolower($name);
+        if (isset($this->headers[$name])) {
+            return $this->headers[$name];
+        }
+        return $default;
+    }
+
+    public function setHeader($name, $value = '')
+    {
+        $this->getHeaders();
+
+        $name = strtolower($name);
+        $this->headers[$name] = $value;
+    }
+    
+    /**
+     * 1. 验证请求的媒体类型
+     * 2. 验证数据是否正确
+     *
+     * @param array $rules
+     */
+    public function validate(array $rules = array()) : bool
+    {
+        return $this->validateRequestData($rules);
+    }
+
+
+    /**
+     * 验证应用服务层参数
+     * @param array $rules [[验证变量,'验证策略','选项','错误编号']
+     *              验证变量$number, int策略, 最小值1,最大值4, 如果错误返回错误编号100
+     *              [[$number, 'int', 'min:1|max:4', '100']]
+     * @return bool
+     */
+    private function validateRequestData(array $rules) : bool
+    {
+        if (empty($rules)) {
             return true;
-        } else {
+        }
+
+        foreach ($rules as $rule) {
+            $verifyValue = $rule[0];
+            $strategyName = ucfirst($rule[1]).'Strategy';
+            $options = $rule[2];
+            $errorCode = $rule[3];
+            
+            if (!$this->isStrategyExist($strategyName)) {
+                return false;
+            }
+            
+            $strategy = $this->strategyFactory($strategyName);
+            if (!$strategy->validate($verifyValue, $options, $errorCode)) {
+                return false;
+            }
+            return true;
+        }
+
+        return true;
+    }
+
+    private function strategyFactory(string $strategyName) : IValidateStrategy
+    {
+        if ($this->isSystemStrategyExist($strategyName)) {
+            $strategy = 'System\Strategy\Validate\\'.$strategyName;
+            return new $strategy();
+        }
+
+        if ($this->isApplicationStrategyExist($strategyName)) {
+            $strategy = 'Application\Strategy\Validate\\'.$strategyName;
+            return new $strategy();
+        }
+
+        return null;
+    }
+
+    private function isStrategyExist(string $strategyName) : bool
+    {
+        return $this->isSystemStrategyExist($strategyName)
+                || $this->isApplicationStrategyExist($strategyName);
+    }
+
+    private function isSystemStrategyExist(string $strategyName) : bool
+    {
+        if (!class_exists('System\Strategy\Validate\\'.$strategyName)) {
+            //错误code
             return false;
         }
+
+        return true;
+    }
+
+    private function isApplicationStrategyExist(string $strategyName) : bool
+    {
+        if (!class_exists('Application\Strategy\\'.$strategyName)) {
+            //错误code
+            return false;
+        }
+
+        return true;
     }
 }

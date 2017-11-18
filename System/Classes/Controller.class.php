@@ -3,6 +3,7 @@
 namespace System\Classes;
 
 use Marmot\Core;
+use System\Interfaces\IView;
 
 /**
  * 应用层服务父类,控制应用服务层的 Request 和 Reponse
@@ -41,7 +42,7 @@ abstract class Controller
     /**
      * 获取 request 对象
      */
-    public function getRequest()
+    protected function getRequest() : Request
     {
         return $this->request;
     }
@@ -49,12 +50,12 @@ abstract class Controller
     /**
      * 获取 response 对象
      */
-    public function getResponse()
+    protected function getResponse() : Response
     {
         return $this->response;
     }
 
-    /**
+   /**
      * 渲染输出内容
      * @var array|string 输出源内容
      */
@@ -62,5 +63,15 @@ abstract class Controller
     {
         $this->getResponse()->data = $data;
         return $this->getResponse()->send();
+    }
+
+    public function error()
+    {
+        header('HTTP/1.1 500 Internal Server Error');
+    }
+
+    public function notFound()
+    {
+        header('HTTP/1.1 404 Not Found');
     }
 }

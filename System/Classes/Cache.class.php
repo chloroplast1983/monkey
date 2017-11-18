@@ -2,7 +2,8 @@
 //powered by kevin
 namespace System\Classes;
 
-use System\Command\Cache;
+use System\Command\Cache\DelCacheCommand;
+use System\Command\Cache\SaveCacheCommand;
 use System\Interfaces\CacheLayer;
 use Marmot\Core;
 
@@ -24,20 +25,20 @@ abstract class Cache implements CacheLayer
      * @author chloroplast1983
      * @version 1.0.20131017
      */
-    public function save($id, $data, $time = 0)
+    public function save($id, $data, $time = 0) : bool
     {
-        $command = new Cache\SaveCacheCommand($this->key.'_'.$id, $data, $time);
-        return $command -> execute();
+        $command = new SaveCacheCommand($this->key.'_'.$id, $data, $time);
+        return $command->execute();
     }
     
     /**
      * 根据id删除缓存一个值
      * @param string $id
      */
-    public function del($id)
+    public function del($id) : bool
     {
-        $command = new Cache\DelCacheCommand($this->key.'_'.$id);
-        return $command -> execute();
+        $command = new DelCacheCommand($this->key.'_'.$id);
+        return $command->execute();
     }
     
     /**
@@ -57,13 +58,13 @@ abstract class Cache implements CacheLayer
      * )
      * @return hits:命中信息和数据 | misses:未命中数据id
      */
-    public function getList($idList)
+    public function getList($idList) : array
     {
 
         $hits = $misses = array();
 
-        foreach ($idList as $key => $val) {
-            $keys[$val] = $this->key.'_'.$val;
+        foreach ($idList as $id) {
+            $keys[$id] = $this->key.'_'.$id;
         }
         
         $flipKey = array_flip($keys);

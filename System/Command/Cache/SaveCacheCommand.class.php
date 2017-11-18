@@ -2,8 +2,6 @@
 namespace System\Command\Cache;
 
 use System\Interfaces;
-use System\Observer;
-use System\Classes;
 use Marmot\Core;
 
 /**
@@ -13,7 +11,6 @@ use Marmot\Core;
 
 class SaveCacheCommand implements Interfaces\Command
 {
-    
     private $key;
     private $data;
     private $time;
@@ -23,18 +20,21 @@ class SaveCacheCommand implements Interfaces\Command
         $this->key = $key;
         $this->data = $data;
         $this->time = $time;
-        
-        if (Classes\Transaction::inTransaction()) {
-            Classes\Transaction::$transactionSubject -> attach(new Observer\CacheObserver($this));
-        }
     }
 
-    public function execute()
+    public function __destruct()
+    {
+        unset($this->key);
+        unset($this->data);
+        unset($this->time);
+    }
+
+    public function execute() : bool
     {
         return Core::$cacheDriver->save($this->key, $this->data, $this->time);
     }
 
-    public function undo()
+    public function undo() : bool
     {
         return Core::$cacheDriver->delete($this->key);
     }
