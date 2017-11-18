@@ -16,8 +16,6 @@ class IndexController extends Controller
 
     public function index()
     {
-        //var_dump($this->validateCsrfToken('XCrcx6zrtu8cUiJmBU1JjHly7qRHalZYPgzdyhDe'));exit();
-        //var_dump($_SESSION['phrase']);exit();
         //exit();
 //        if ($this->getRequest()->isAjax())
 //        {

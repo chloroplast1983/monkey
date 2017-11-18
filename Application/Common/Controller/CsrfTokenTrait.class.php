@@ -5,8 +5,20 @@ use Common\Utils\CsrfToken;
 
 trait CsrfTokenTrait
 {
-    public function validateCsrfToken(string $csrfToken) : bool
+    private function validateCsrfToken() : bool
     {
-        return CsrfToken::validate($csrfToken);
+       return $this->validateBodyToken() || $this->validateHeaderToken();
+    }
+
+    private function validateBodyToken() : bool
+    {
+        $csrfToken = $this->getRequest()->post('_token');
+        return !empty($csrfToken) ? CsrfToken::validate($csrfToken) : false;
+    }
+
+    private function validateHeaderToken() : bool
+    {
+        $this->getRequest()->getHeader('X-CSRF-TOKEN');
+        return !empty($csrfToken) ? CsrfToken::validate($csrfToken) : false;
     }
 }
