@@ -1,0 +1,24 @@
+#!/bin/bash
+
+function createDatabase {
+	cat ./database/database.sql | docker exec -i $1 /usr/bin/mysql -uroot -p123456 2>/dev/null
+	echo 'create database success'
+}
+
+function initialTestDatabase {
+	cat database/test.sql | docker exec -i $1 /usr/bin/mysql -uroot -p123456 2>/dev/null
+	for sqlfile in `ls ./database/*.execute.sql`; 
+	do 
+		sed '1 s/;/_test;/g' $sqlfile | docker exec -i $1 /usr/bin/mysql -uroot -p123456 2>/dev/null; 
+	done
+	echo 'test database initial success'
+}
+
+function initialDatabase {
+	for sqlfile in `ls ./database/*.execute.sql`; 
+	do 
+		cat $sqlfile | docker exec -i $1 /usr/bin/mysql -uroot -p123456 2>/dev/null; 
+	done
+
+	echo 'database initial success'
+}
