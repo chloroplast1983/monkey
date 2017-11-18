@@ -236,7 +236,7 @@ class Core
         $containerCache->setNamespace('phpcore');
         $containerBuilder->setDefinitionCache($containerCache);
 
-        $containerBuilder->writeProxiesToFile(true, S_ROOT.'cache/proxies');
+        $containerBuilder->writeProxiesToFile(true, S_ROOT.'Cache/proxies');
         //为容器设置配置文件
         $containerBuilder->addDefinitions(S_ROOT.'config.'.$_ENV['APP_ENV'].'.php');
         //创建容器
@@ -264,7 +264,7 @@ class Core
                 }
             },
             [
-                'cacheFile' => S_ROOT. 'cache/route.cache',
+                'cacheFile' => S_ROOT. 'Cache/route.cache',
                 'cacheDisabled' => Core::$container->get('cache.route.disable'),
             ]
         );

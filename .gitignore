@@ -4,3 +4,8 @@ config.php
 Global/attachment
 .DS_Store
 View/Smarty/Compile
+Docs/UnitTestCover
+route.cache
+debug
+!cache/proxies/.gitkeep
+cache/proxies/*.php
