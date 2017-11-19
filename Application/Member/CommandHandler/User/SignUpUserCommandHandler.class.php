@@ -18,8 +18,6 @@ class SignUpUserCommandHandler implements ICommandHandler
         $user = new User();
 
         $user->setCellPhone($command->cellPhone);
-        $user->setUserName($command->userName);
-        $user->setNickName($command->userName);
         $user->setPassword($command->password);
         
         if ($user->signUp()) {

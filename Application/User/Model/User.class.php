@@ -140,7 +140,6 @@ abstract class User
      * 设置用户密码
      *
      * @param string $password 用户密码
-     * @param string $salt 盐
      */
     public function setPassword(string $password)
     {

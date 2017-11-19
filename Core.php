@@ -81,10 +81,10 @@ class Core
     public function initTest()
     {
         self::initAutoload();//autoload
-        self::initEnv();//初始化环境
-        self::initTestEnv();//初始化测试环境
         self::initContainer();//引入容器
         self::initCache();//初始化缓存使用
+        self::initEnv();//初始化环境
+        self::initTestEnv();//初始化测试环境
         // self::initMongo();
         self::initError();
     }
@@ -101,9 +101,9 @@ class Core
     {
 
         self::initAutoload();//autoload
-        self::initEnv();//初始化环境
         self::initContainer();//引入容器
         self::initCache();//初始化缓存使用
+        self::initEnv();//初始化环境
         // self::initMongo();
         self::initError();
     }

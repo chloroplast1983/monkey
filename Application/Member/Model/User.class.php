@@ -36,6 +36,9 @@ class User extends AbstractUser
      */
     public function signUp() : bool
     {
+        if (!$this->getUserRepository()->add($this)) {
+            return false;
+        }
         return true;
     }
 

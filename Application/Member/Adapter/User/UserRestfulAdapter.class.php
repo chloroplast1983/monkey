@@ -115,6 +115,20 @@ class UserRestfulAdapter extends GuzzleAdapter implements IUserAdapter, IAsyncAd
 
     public function signUp(User $user) : bool
     {
+        $data = $this->getTranslator()->objectToArray(
+            $user,
+            array(
+                'cellPhone',
+                'password'
+            )
+        );
+        
+        $this->post(
+            'users',
+            $data
+        );
+
+        return $this->isSuccess();
     }
 
     public function updatePassword(User $user) : bool

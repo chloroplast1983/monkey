@@ -23,7 +23,6 @@ class CoreTest extends \PHPUnit_Framework_TestCase
         $_systemFolder = array(S_ROOT.'/System/Command/Cache',
                                S_ROOT.'/System/Classes/',
                                S_ROOT.'/System/Interfaces/',
-                               S_ROOT.'/System/Observer/',
                                S_ROOT.'/System/Query/',
                               );
         //准备系统文件的文件夹,用于统计系统文件总数 -- 结束
@@ -72,28 +71,12 @@ class CoreTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * 测试是否初始化了Version
-     */
-    public function testInitVersion()
-    {
-        $this->assertTrue(defined('MARMOT_VERSION'), 'version not init');
-    }
-
-    /**
      * 测试是否初始化了容器
      */
     public function testInitContainer()
     {
         //测试容器已经被初始化了
         $this->assertTrue(is_object(Core::$container) && Core::$container instanceof \DI\Container);
-    }
-
-    /**
-     * 测试是否初始化了数据库驱动
-     */
-    public function testInitDb()
-    {
-        $this->assertTrue(is_object(Core::$dbDriver) && Core::$dbDriver instanceof \System\Classes\MyPdo);
     }
 
     /**
@@ -105,14 +88,5 @@ class CoreTest extends \PHPUnit_Framework_TestCase
             is_object(Core::$cacheDriver) &&
             Core::$cacheDriver instanceof \Doctrine\Common\Cache\MemcachedCache
         );
-    }
-
-    /**
-     * 测试是否初始化了环境
-     */
-    public function testInitEnv()
-    {
-        global $_FWGLOBAL;
-        $this->assertGreaterThan(0, $_FWGLOBAL['timestamp']);//判断是否为大于0的数字
     }
 }

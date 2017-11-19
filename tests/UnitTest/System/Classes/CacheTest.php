@@ -127,7 +127,7 @@ class CacheTest extends \PHPUnit_Framework_TestCase
         //循环保存数据
         //因为在cache层,有前缀
         //所以这里需要拼接cacheKeyPrefix
-        $keys = '';
+        $keys = array();
         foreach ($this->data as $key => $value) {
             $this->assertTrue(Core::$cacheDriver->save($this->cacheKeyPrefix.'_'.$key, $value), ' save fails');
             $keys[] = $key;

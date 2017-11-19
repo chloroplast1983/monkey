@@ -60,8 +60,44 @@ class UserRestfulTranslator extends Translator
         return $user;
     }
     
-    public function objectToArray($user)
+    public function objectToArray($user, array $keys = array())
     {
-        unset($user);
+        if (!$user instanceof User) {
+            return array();
+        }
+
+        if (empty($keys)) {
+            $keys = array(
+                'id',
+                'cellPhone',
+                'userName',
+                'nickName',
+                'password'
+            );
+        }
+
+        $expression = array(
+            'data'=>array(
+                'type'=>'users'
+            )
+        );
+        
+        if (in_array('id', $keys)) {
+            $expression['data']['id'] = $user->getId();
+        }
+
+        $attributes = array();
+        if (in_array('cellPhone', $keys)) {
+            $attributes['cellPhone'] = $user->getCellPhone();
+        }
+        if (in_array('password', $keys)) {
+            $attributes['password'] = $user->getPassWord();
+        }
+        if (in_array('userName', $keys)) {
+            $attributes['userName'] = $user->getUserName();
+        }
+        if (in_array('nickName', $keys)) {
+            $attributes['nickName'] = $user->getNickName();
+        }
     }
 }
