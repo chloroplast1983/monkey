@@ -25,7 +25,7 @@ abstract class GuzzleAdapter
             [
              'base_uri'=>$baseurl,
              'http_errors'=>false,
-             'timeout'=>0.1
+             'timeout'=>5
             ]
         );
 

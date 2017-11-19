@@ -1,3 +1,3 @@
 Hello World
 
-{11|marmot_encode}
+{'abcs'|marmot_mask:1:2}

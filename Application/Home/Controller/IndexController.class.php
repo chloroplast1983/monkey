@@ -26,22 +26,24 @@ class IndexController extends Controller
         //var_dump(Core::$container->get('user'));
         //exit();
         //var_dump(\Common\Utils\Mask::mask('1234142114',2,3));exit();
-        //$latestUsersCache = new \Member\Cache\LatestUsersFragmentCache();
-        //$latestUsersCache->refresh();
+        $latestUsersCache = new \Member\Cache\LatestUsersFragmentCache();
+        //echo '<pre>';
+       // $latestUsersCache->refresh();
+        //var_dump($latestUsersCache->get());
         //exit();
  //       $data = $latestUsersCache->get();
-//        $repository = new UserRepository();
+        //$repository = new UserRepository();
 //        $data = $repository->scenario(UserRepository::LIST_MODEL_UN)->fetchOne(1);
 //        var_dump($data);
 
         //$adapter = new UserRestfulAdapter();
       //  $userOne = $adapter->fetchList(array(2,3));
 //        echo '<pre>';
-//        $userOne = $repository->fetchOne(2);
+       //$userOne = $repository->scenario(UserRepository::LIST_MODEL_UN)->fetchOne(1);
 //        var_dump($data);
-//        var_dump($userOne);
+        //var_dump($userOne);
+        //exit();
 //
-        $this->getResponse()->view()->assign('test', 1);
         $this->getResponse()->view()->display('Home/index.tpl');
         return true;
     }
