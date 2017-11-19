@@ -47,7 +47,9 @@ class UserRepository implements IRepository
 
     public function add(User $user) : bool
     {
-        return $this->getAdapter()->add($user);
+        $lastUser = $this->getAdapter()->signUp($user);
+        $user->setId($lastUser->getId());
+        return true;
     }
 
     public function updatePassword(User $user) : bool

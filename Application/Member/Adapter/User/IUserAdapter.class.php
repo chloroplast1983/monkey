@@ -9,7 +9,7 @@ interface IUserAdapter
 
     public function fetchList(array $ids) : array;
 
-    public function signUp(User $user) : bool;
+    public function signUp(User $user) : User;
 
     public function updatePassword(User $user) : bool;
 

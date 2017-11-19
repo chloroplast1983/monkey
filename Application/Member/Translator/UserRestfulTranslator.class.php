@@ -18,7 +18,7 @@ class UserRestfulTranslator extends Translator
             return $results;
         }
 
-        return [$expression['data']['id']=>$this->arrayToSingleObject($expression)];
+        return [$expression['data']['id']=>$this->arrayToSingleObject($expression['data'])];
     }
 
     private function arrayToSingleObject(array $expression)
@@ -99,5 +99,8 @@ class UserRestfulTranslator extends Translator
         if (in_array('nickName', $keys)) {
             $attributes['nickName'] = $user->getNickName();
         }
+        $expression['data']['attributes'] = $attributes;
+
+        return $expression;
     }
 }

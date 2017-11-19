@@ -9,13 +9,30 @@ use Member\Model\User;
 
 class SignUpUserCommandHandler implements ICommandHandler
 {
+    private $user;
+
+    public function __construct()
+    {
+        $this->user = new User();
+    }
+
+    public function __destruct()
+    {
+        unset($this->user);
+    }
+
+    protected function getUser() : User
+    {
+        return $this->user;
+    }
+
     public function execute(ICommand $command)
     {
         if (!($command instanceof SignUpUserCommand)) {
             throw new InvalidArgumentException;
         }
 
-        $user = new User();
+        $user = $this->getUser();
 
         $user->setCellPhone($command->cellPhone);
         $user->setPassword($command->password);

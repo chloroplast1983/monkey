@@ -113,7 +113,7 @@ class UserRestfulAdapter extends GuzzleAdapter implements IUserAdapter, IAsyncAd
         return $this->getTranslator()->arrayToObject($this->getContents());
     }
 
-    public function signUp(User $user) : bool
+    public function signUp(User $user) : User
     {
         $data = $this->getTranslator()->objectToArray(
             $user,
@@ -128,7 +128,7 @@ class UserRestfulAdapter extends GuzzleAdapter implements IUserAdapter, IAsyncAd
             $data
         );
 
-        return $this->isSuccess();
+        return $this->isSuccess() ? current($this->translate()) : NullUser();
     }
 
     public function updatePassword(User $user) : bool

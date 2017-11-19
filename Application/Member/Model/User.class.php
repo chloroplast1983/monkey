@@ -3,6 +3,7 @@ namespace Member\Model;
 
 use Marmot\Core;
 use User\Model\User as AbstractUser;
+use Member\Repository\User\UserRepository;
 
 /**
  * 用户领域对象
@@ -14,6 +15,27 @@ class User extends AbstractUser
 {
     const STATUS_NORMAL = 0;
     const STATUS_DELETE = -2;
+    
+    private $userRepository;
+
+    public function __construct(int $id = 0)
+    {
+        parent::__construct($id);
+        $this->status = self::STATUS_NORMAL;
+        $this->userRepository = Core::$container->get('Member\Repository\User\UserRepository');
+    }
+
+    public function __destruct()
+    {
+        parent::__destruct();
+        unset($this->status);
+        unset($this->userRepository);
+    }
+
+    protected function getUserRepository() : UserRepository
+    {
+        return $this->userRepository;
+    }
 
     /**
      * 设置用户状态

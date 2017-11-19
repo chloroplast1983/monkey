@@ -16,17 +16,28 @@ class UserController extends Controller
 {
     public function index()
     {
-        $cookie = new \System\Classes\Cookie();
-
-        $cookie->name = Core::$container->get('cookie.name');
-        $cookie->value = 1;
-        $cookie->expire = Core::$container->get('cookie.duration');
-
-        if ($cookie->add()) {
-            //$userSessionRepository = new UserRepository();
-            //$userSessionRepository->setAdapter(new UserSessionAdapter());
-            //$userSessionRepository->add($user);
-            //Core::$container->set('user', $user);
+//        $cookie = new \System\Classes\Cookie();
+//
+//        $cookie->name = Core::$container->get('cookie.name');
+//        $cookie->value = 1;
+//        $cookie->expire = Core::$container->get('cookie.duration');
+//
+//        if ($cookie->add()) {
+//            //$userSessionRepository = new UserRepository();
+//            //$userSessionRepository->setAdapter(new UserSessionAdapter());
+//            //$userSessionRepository->add($user);
+//            //Core::$container->set('user', $user);
+///        }
+        $commandBus = new CommandBus(new UserCommandHandlerFactory());
+        $command = new SignUpUserCommand(
+            '15202939'.rand(100,999),
+            '15202939435',
+            '12344'
+        );
+        if ($commandBus->send($command)) {
+            var_dump($command->uid);
         }
+
+        exit();
     }
 }
