@@ -30,9 +30,9 @@ class IndexController extends Controller
         //$latestUsersCache->refresh();
         //exit();
  //       $data = $latestUsersCache->get();
-        $repository = new UserRepository();
-        $data = $repository->scenario(UserRepository::LIST_MODEL_UN)->fetchOne(1);
-        var_dump($data);
+//        $repository = new UserRepository();
+//        $data = $repository->scenario(UserRepository::LIST_MODEL_UN)->fetchOne(1);
+//        var_dump($data);
 
         //$adapter = new UserRestfulAdapter();
       //  $userOne = $adapter->fetchList(array(2,3));
@@ -41,6 +41,7 @@ class IndexController extends Controller
 //        var_dump($data);
 //        var_dump($userOne);
 //
+        $this->getResponse()->view()->assign('test', 1);
         $this->getResponse()->view()->display('Home/index.tpl');
         return true;
     }

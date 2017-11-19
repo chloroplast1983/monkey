@@ -1,6 +1,3 @@
-{marmot_csrf}
-{marmot_csrf}
----
-{marmot_csrf}
+Hello World
 
-{marmot_csrf_field}
+{11|marmot_encode}
