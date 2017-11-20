@@ -32,9 +32,9 @@ class IndexController extends Controller
         //var_dump($latestUsersCache->get());
         //exit();
  //       $data = $latestUsersCache->get();
-        $repository = new UserRepository();
-        $data = $repository->fetchOne(1);
-        var_dump($data);
+//        $repository = new UserRepository();
+ //       $data = $repository->fetchOne(1);
+  //      var_dump($data);
 
         //$adapter = new UserRestfulAdapter();
       //  $userOne = $adapter->fetchList(array(2,3));
