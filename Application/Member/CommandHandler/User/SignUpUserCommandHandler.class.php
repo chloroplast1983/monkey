@@ -41,7 +41,6 @@ class SignUpUserCommandHandler implements ICommandHandler
             $command->uid = $user->getId();
             return true;
         }
-
         return false;
     }
 }
