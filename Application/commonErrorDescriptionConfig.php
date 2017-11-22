@@ -67,4 +67,17 @@ return array(
             'source'=>array(),
             'meta'=>array()
         ),
+    CELLPHONE_FORMAT_ERROR=>
+        array(
+            'id'=>CELLPHONE_FORMAT_ERROR,
+            'link'=>'',
+            'status'=>403,
+            'code'=>'CELLPHONE_FORMAT_ERROR',
+            'title'=>'手机号格式不对',
+            'detail'=>'手机号码应为11数字',
+            'source'=>array(
+                'pointer'=>'cellphone'
+            ),
+            'meta'=>array()
+        ),
 );

@@ -16,6 +16,7 @@ class IndexController extends Controller
 
     public function index()
     {
+        //$this->test(1);
         //exit();
 //        if ($this->getRequest()->isAjax())
 //        {
@@ -46,5 +47,14 @@ class IndexController extends Controller
 //
         $this->getResponse()->view()->display('Home/index.tpl');
         return true;
+    }
+
+    /**
+     * 没有路由的widget
+     */
+    public function test(int $a)
+    {
+        $this->getResponse()->view()->assign('a', $a);
+        $this->getResponse()->view()->display('Home/test.tpl');
     }
 }

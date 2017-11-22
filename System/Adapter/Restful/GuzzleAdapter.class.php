@@ -209,7 +209,9 @@ abstract class GuzzleAdapter
         $this->setResponseHeaders($response->getHeaders());
     }
 
-    abstract protected function translate();
+    abstract protected function translateToObject($object = null);
+
+    abstract protected function translateToObjects();
 
     abstract public function scenario($scenario) : void;
 

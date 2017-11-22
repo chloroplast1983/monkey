@@ -65,6 +65,10 @@ abstract class Controller
         return $this->getResponse()->send();
     }
 
+    public function displayError()
+    {
+    }
+
     public function error()
     {
         header('HTTP/1.1 500 Internal Server Error');

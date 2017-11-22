@@ -7,29 +7,38 @@ use Member\Model\NullUser;
 
 class UserRestfulTranslator extends Translator
 {
-    public function arrayToObject(array $expression)
+    public function arrayToObject(array $expression, $user = null)
+    {
+        return $this->translateToObject($expression['data'], $user);
+    }
+
+    public function arrayToObjects(array $expression) : array
     {
         if (isset($expression['data'][0])) {
             $results = array();
             foreach ($expression['data'] as $each) {
-                $results[$each['id']] = $this->arrayToSingleObject($each);
+                $results[$each['id']] = $this->translateToObject($each);
             }
 
             return $results;
         }
 
-        return [$expression['data']['id']=>$this->arrayToSingleObject($expression['data'])];
+        return [$expression['data']['id']=>$this->translateToObject($expression['data'])];
     }
 
-    private function arrayToSingleObject(array $expression)
+    private function translateToObject(array $expression, $user = null)
     {
         $id = $expression['id'];
         $attributes = $expression['attributes'];
-    
-        $user = new User($id);
 
-        if (isset($attributes['cellPhone'])) {
-            $user->setCellPhone($attributes['cellPhone']);
+        if ($user == null) {
+            $user = new User();
+        }
+
+        $user->setId($id);
+
+        if (isset($attributes['cellphone'])) {
+            $user->setCellphone($attributes['cellphone']);
         }
 
         if (isset($attributes['createTime'])) {
@@ -69,7 +78,7 @@ class UserRestfulTranslator extends Translator
         if (empty($keys)) {
             $keys = array(
                 'id',
-                'cellPhone',
+                'cellphone',
                 'userName',
                 'nickName',
                 'password'
@@ -87,8 +96,8 @@ class UserRestfulTranslator extends Translator
         }
 
         $attributes = array();
-        if (in_array('cellPhone', $keys)) {
-            $attributes['cellPhone'] = $user->getCellPhone();
+        if (in_array('cellphone', $keys)) {
+            $attributes['cellphone'] = $user->getCellphone();
         }
         if (in_array('password', $keys)) {
             $attributes['password'] = $user->getPassWord();

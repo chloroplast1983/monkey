@@ -2,6 +2,7 @@
 namespace Member\Repository\User;
 
 use System\Interfaces\IRepository;
+use System\Interfaces\INull;
 
 use Common\Repository\AsyncRepositoryTrait;
 
@@ -47,9 +48,18 @@ class UserRepository implements IRepository
 
     public function add(User $user) : bool
     {
-        $lastUser = $this->getAdapter()->signUp($user);
-        $user->setId($lastUser->getId());
-        return true;
+        return !(
+            $this->getAdapter()->signUp($user)
+            instanceof INull
+        );
+    }
+
+    public function signIn(User $user) : bool
+    {
+        return !(
+            $this->getAdapter()->signIn($user)
+            instanceof INull
+        );
     }
 
     public function updatePassword(User $user) : bool

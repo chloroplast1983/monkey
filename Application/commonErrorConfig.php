@@ -28,3 +28,5 @@ define('RESOURCE_NOT_EXIST', 10);
  * 命令处理器不存在
  */
 define('COMMAND_HANDLER_NOT_EXIST', 11);
+
+define('CELLPHONE_FORMAT_ERROR', 102);

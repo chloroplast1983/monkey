@@ -1,0 +1,1 @@
+Inner the widget: {$a}

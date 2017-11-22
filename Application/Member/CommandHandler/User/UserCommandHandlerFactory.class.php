@@ -4,7 +4,7 @@ namespace Member\CommandHandler\User;
 use System\Interfaces\ICommandHandlerFactory;
 use System\Interfaces\ICommandHandler;
 use System\Interfaces\ICommand;
-use Marmot\Core;
+use System\Classes\NullCommandHandler;
 
 class UserCommandHandlerFactory implements ICommandHandlerFactory
 {
@@ -14,12 +14,20 @@ class UserCommandHandlerFactory implements ICommandHandlerFactory
         $commandHandler = '';
 
         switch (get_class($command)) {
-            //注册
             case 'Member\Command\User\SignUpUserCommand':
                 $commandHandler = new SignUpUserCommandHandler();
                 break;
             case 'Member\Command\User\AuthUserCommand':
                 $commandHandler = new AuthUserCommandHandler();
+                break;
+            case 'Member\Command\User\SignInUserCommand':
+                $commandHandler = new SignInUserCommandHandler();
+                break;
+            case 'Member\Command\User\SignOutUserCommand':
+                $commandHandler = new SignOutUserCommandHandler();
+                break;
+            default:
+                $commandHandler = new NullCommandHandler();
                 break;
         }
         return $commandHandler;

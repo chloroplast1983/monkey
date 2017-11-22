@@ -12,7 +12,7 @@ trait CsrfTokenTrait
 
     private function validateBodyToken() : bool
     {
-        $csrfToken = $this->getRequest()->post('_token');
+        $csrfToken = $this->getRequest()->post('_csrf_token');
         return !empty($csrfToken) ? CsrfToken::validate($csrfToken) : false;
     }
 

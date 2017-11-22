@@ -170,7 +170,6 @@ class Core
         Core::$container->set('time', time());
         //加载应用配置文件
         include S_ROOT.'Application/config.php';
-        include S_ROOT.'Application/widgetRules.php';
     }
 
     private function initTestEnv()
@@ -189,9 +188,10 @@ class Core
         self::setLastError(ERROR_NOT_DEFINED);
     }
 
-    public static function setLastError(int $errorCode = 0)
-    {
-
+    public static function setLastError(
+        int $errorCode = 0,
+        array $source = array()
+    ) {
         if ($errorCode <= COMMON_ERROR_LIMIT) {
             $errorDescriptions = include 'Application/commonErrorDescriptionConfig.php';
         } else {
@@ -209,7 +209,7 @@ class Core
             $errorDescriptions[$errorCode]['code'],
             $errorDescriptions[$errorCode]['title'],
             $errorDescriptions[$errorCode]['detail'],
-            $errorDescriptions[$errorCode]['source'],
+            !empty($souce) ? $source : $errorDescriptions[$errorCode]['source'],
             $errorDescriptions[$errorCode]['meta']
         );
     }

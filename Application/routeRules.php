@@ -15,15 +15,6 @@ return [
         ],
     ],
     //user 用户
-    //获取用户详情接口
-    [
-        'method'=>'GET',
-        'rule'=>'/users/{id:\d+}',
-        'controller'=>[
-            'Member\Controller\UserController',
-            'getOne'
-        ]
-    ],
     [
         'method'=>'GET',
         'rule'=>'/users',
@@ -34,29 +25,29 @@ return [
     ],
     //注册
     [
-        'method'=>'POST',
-        'rule'=>'/users',
+        'method'=>['POST','GET'],
+        'rule'=>'/users/signUp',
         'controller'=>[
-            'Member\Controller\UserController',
+            'Member\Controller\UserSignController',
             'signUp'
         ]
     ],
     //登录
     [
-        'method'=>'POST',
+        'method'=>['POST','GET'],
         'rule'=>'/users/signIn',
         'controller'=>[
-            'Member\Controller\UserController',
+            'Member\Controller\UserSignController',
             'signIn'
         ]
     ],
-    //修改用户密码
+    //登出
     [
-        'method'=>'PUT',
-        'rule'=>'/users/{id:\d+}/updatePassword',
+        'method'=>'GET',
+        'rule'=>'/users/signOut',
         'controller'=>[
-            'Member\Controller\UserController',
-            'updatePassword'
+            'Member\Controller\UserSignController',
+            'signOut'
         ]
-    ],
+    ]
 ];

@@ -10,6 +10,11 @@ class NullUser extends User implements INull
         return false;
     }
 
+    public function signOut() : bool
+    {
+        return false;
+    }
+
     public function updatePassword() : bool
     {
         return false;

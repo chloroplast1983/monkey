@@ -47,7 +47,7 @@ class UserRestfulAdapter extends GuzzleAdapter implements IUserAdapter, IAsyncAd
             'users/'.$id
         );
 
-        return $this->isSuccess() ? $this->translate()[$id] : new NullUser();
+        return $this->isSuccess() ? $this->translateToObject() : new NullUser();
     }
 
     public function fetchList(array $ids) : array
@@ -56,7 +56,7 @@ class UserRestfulAdapter extends GuzzleAdapter implements IUserAdapter, IAsyncAd
             'users/'.implode(',', $ids)
         );
 
-        return $this->isSuccess() ? $this->translate() : array();
+        return $this->isSuccess() ? $this->translateToObjects : array();
     }
 
     public function search(
@@ -75,7 +75,7 @@ class UserRestfulAdapter extends GuzzleAdapter implements IUserAdapter, IAsyncAd
             )
         );
 
-        return $this->isSuccess() ? $this->translate() : array();
+        return $this->isSuccess() ? $this->translateToObjects : array();
     }
 
     public function fetchOneAsync(int $id)
@@ -108,17 +108,12 @@ class UserRestfulAdapter extends GuzzleAdapter implements IUserAdapter, IAsyncAd
         );
     }
 
-    protected function translate()
-    {
-        return $this->getTranslator()->arrayToObject($this->getContents());
-    }
-
     public function signUp(User $user) : User
     {
         $data = $this->getTranslator()->objectToArray(
             $user,
             array(
-                'cellPhone',
+                'cellphone',
                 'password'
             )
         );
@@ -128,10 +123,39 @@ class UserRestfulAdapter extends GuzzleAdapter implements IUserAdapter, IAsyncAd
             $data
         );
 
-        return $this->isSuccess() ? current($this->translate()) : NullUser();
+        return $this->isSuccess() ? $this->translateToObject($user) : new NullUser();
+    }
+
+    public function signIn(User $user) : User
+    {
+        $data = $this->getTranslator()->objectToArray(
+            $user,
+            array(
+                'cellphone',
+                'password'
+            )
+        );
+        
+        $this->post(
+            'users/signIn',
+            $data
+        );
+
+        return $this->isSuccess() ? $this->translateToObject($user) : new NullUser();
     }
 
     public function updatePassword(User $user) : bool
     {
     }
+
+    protected function translateToObjects() : array
+    {
+        return $this->getTranslator()->arrayToObjects($this->getContents());
+    }
+
+    protected function translateToObject($user = null)
+    {
+        return $this->getTranslator()->arrayToObject($this->getContents(), $user);
+    }
+
 }
