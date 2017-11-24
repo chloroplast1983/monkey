@@ -13,10 +13,11 @@ use Member\Command\User\SignInUserCommand;
 use Member\Command\User\SignOutUserCommand;
 
 use Member\CommandHandler\User\UserCommandHandlerFactory;
-use Member\Repository\User\UserRepository;
 use Member\Model\User;
 
-use WidgetRules\CommonWidgetRules;
+use Member\View\Template\SignUpView;
+
+use WidgetRules\Common\InputWidgetRules;
 
 use Marmot\Core;
 
@@ -24,12 +25,11 @@ class UserSignController extends Controller
 {
     use CsrfTokenTrait;
     use CaptchaTrait;
-	use MessageTrait;
+    use MessageTrait;
 
     public function signUp()
     {
-        if($this->getRequest()->isGetMethod())
-        {
+        if ($this->getRequest()->isGetMethod()) {
             return $this->signUpView();
         }
 
@@ -38,15 +38,15 @@ class UserSignController extends Controller
 
     protected function signUpView() : bool
     {
-        $this->getResponse()->view()->display('User/SignUp.tpl');
+        $this->getResponse()->view(new SignUpView())->render();
         return true;
     }
 
     protected function signUpAction() : bool
     {
-        $cellphone = $this->getRequest()->post('cellphone','');
-        $password = $this->getRequest()->post('password','');
-        $phrase = $this->getRequest()->post('phrase','');
+        $cellphone = $this->getRequest()->post('cellphone', '');
+        $password = $this->getRequest()->post('password', '');
+        $phrase = $this->getRequest()->post('phrase', '');
 
         if ($this->validateSignUpScenario(
             $cellphone,
@@ -74,13 +74,13 @@ class UserSignController extends Controller
     ) {
         return $this->validateCsrfToken()
             && $this->validateCaptcha($phrase)
-            && CommonWidgetRules::INPUT_CELLPHONE($cellphone);
+            && InputWidgetRules::cellphone($cellphone)
+            && InputWidgetRules::password($password);
     }
 
     public function signIn()
     {
-        if($this->getRequest()->isGetMethod())
-        {
+        if ($this->getRequest()->isGetMethod()) {
             return $this->signInView();
         }
 
@@ -95,11 +95,11 @@ class UserSignController extends Controller
 
     protected function signInAction() : bool
     {
-        $cellphone = $this->getRequest()->post('cellphone','');
-        $password = $this->getRequest()->post('password','');
-        $phrase = $this->getRequest()->post('phrase','');
+        $cellphone = $this->getRequest()->post('cellphone', '');
+        $password = $this->getRequest()->post('password', '');
+        $phrase = $this->getRequest()->post('phrase', '');
 
-        if ($this->validateSignUpScenario(
+        if ($this->validateSignInScenario(
             $cellphone,
             $password,
             $phrase
@@ -111,12 +111,12 @@ class UserSignController extends Controller
             );
             if ($commandBus->send($command)) {
                 var_dump(Core::$container->get('user'));
-                exit();
+                return true;
             }
         }
 
-        var_dump('error');
-        exit();
+        $this->displayError();
+        return false;
     }
 
     private function validateSignInScenario(
@@ -125,7 +125,9 @@ class UserSignController extends Controller
         string $phrase
     ) {
         return $this->validateCsrfToken()
-            && $this->validateCaptcha($phrase);
+            && $this->validateCaptcha($phrase)
+            && InputWidgetRules::cellphone($cellphone)
+            && InputWidgetRules::password($password);
     }
 
     public function signOut()
@@ -133,7 +135,7 @@ class UserSignController extends Controller
         $commandBus = new CommandBus(new UserCommandHandlerFactory());
         if ($commandBus->send(new SignOutUserCommand())) {
             var_dump('logout');
-            exit();
+            return true;
         }
     }
 }

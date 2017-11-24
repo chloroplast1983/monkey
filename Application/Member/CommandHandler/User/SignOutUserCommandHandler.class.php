@@ -11,9 +11,9 @@ use Marmot\Core;
 
 class SignOutUserCommandHandler implements ICommandHandler
 {
-    
     public function execute(ICommand $command)
     {
+        unset($command);
         $user = Core::$container->get('user');
         return $user->signOut();
     }

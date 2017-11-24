@@ -30,8 +30,7 @@ class SignUpUserCommandHandlerTest extends GenericTestCase
 
         $command = new SignUpUserCommand(
             $phoneNumber,
-            $password,
-            $phoneNumber
+            $password
         );
 
         $user = $this->prophesize(User::class);

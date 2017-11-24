@@ -23,7 +23,7 @@ class UserRepository implements IRepository
 
     private $adapter;
     
-    public const LIST_MODEL_UN = 'USERNAME';
+    const LIST_MODEL_UN = 'USERNAME';
 
     public function __construct()
     {
@@ -60,11 +60,6 @@ class UserRepository implements IRepository
             $this->getAdapter()->signIn($user)
             instanceof INull
         );
-    }
-
-    public function updatePassword(User $user) : bool
-    {
-        return $this->getAdapter()->update($user);
     }
 
     /**

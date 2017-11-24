@@ -19,25 +19,17 @@ class CoreTest extends \PHPUnit_Framework_TestCase
      */
     public function testAutoLoad()
     {
-        //准备系统文件的文件夹,用于统计系统文件总数 -- 开始
-        $_systemFolder = array(S_ROOT.'/System/Command/Cache',
-                               S_ROOT.'/System/Classes/',
-                               S_ROOT.'/System/Interfaces/',
-                               S_ROOT.'/System/Query/',
-                              );
-        //准备系统文件的文件夹,用于统计系统文件总数 -- 结束
-        //计算文件总数 -- 开始
-        $fileCounts = 0;
-        foreach ($_systemFolder as $folder) {
-            $fileCounts += $this -> getFileCountsFromFolder($folder);
-        }
+        $result = $this->readAllFiles(S_ROOT.'/System');
+        $filesCount = sizeof($result['files']);
+
         //计算文件总数 -- 结束
         //测试是否classMaps.php中的sizeof(array)等于文件总数
         $classMaps = include S_ROOT.'System/classMaps.php';
+        $filesCount = --$filesCount; //减去classMaps
         $this->assertEquals(
             sizeof($classMaps),
-            $fileCounts,
-            'System file counts: '.$fileCounts.' not equal sizeof classMaps: '.sizeof($classMaps)
+            $filesCount,
+            'System file counts: '.$filesCount.' not equal sizeof classMaps: '.sizeof($classMaps)
         );
         
         //测试classMaps中的class是否自动加载正确
@@ -53,21 +45,36 @@ class CoreTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($homeController instanceof \Home\Controller\IndexController, 'Application not autoload');
     }
 
-    /**
-     * 获取文件总数,用于测试是否System/classMaps.php中已经包含了全部系统文件
-     */
-    private function getFileCountsFromFolder($folder)
+    private function readAllFiles($root = '.')
     {
-        $dir = './'.$folder;
-        $handle = opendir($folder);
-        $i = 0;
-        while (false !== $file=(readdir($handle))) {
-            if ($file !== '.' && $file != '..') {
-                $i++;
+        $files  = array('files'=>array(), 'dirs'=>array());
+        $directories  = array();
+        $last_letter  = $root[strlen($root)-1];
+        $root  = ($last_letter == '\\' || $last_letter == '/') ? $root : $root.DIRECTORY_SEPARATOR;
+
+        $directories[]  = $root;
+
+        while (sizeof($directories)) {
+            $dir  = array_pop($directories);
+            if ($handle = opendir($dir)) {
+                while (false !== ($file = readdir($handle))) {
+                    if ($file == '.' || $file == '..') {
+                        continue;
+                    }
+                    $file  = $dir.$file;
+                    if (is_dir($file)) {
+                        $directory_path = $file.DIRECTORY_SEPARATOR;
+                        array_push($directories, $directory_path);
+                        $files['dirs'][]  = $directory_path;
+                    } elseif (is_file($file)) {
+                        $files['files'][]  = $file;
+                    }
+                }
+                closedir($handle);
             }
         }
-        closedir($handle);
-        return $i;
+
+        return $files;
     }
 
     /**

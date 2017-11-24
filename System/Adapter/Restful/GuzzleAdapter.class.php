@@ -1,6 +1,8 @@
 <?php
 namespace System\Adapter\Restful;
 
+use System\Classes\Server;
+
 use GuzzleHttp;
 use GuzzleHttp\Exception\RequestException;
 
@@ -31,7 +33,8 @@ abstract class GuzzleAdapter
 
         $this->requstHeaders = [
             'Accept-Encoding' => 'gzip',
-            'Accept'=>'application/vnd.api+json'
+            'Accept'=>'application/vnd.api+json',
+            'Request-Id'=>Server::get('REQUEST_ID', '')
         ];
     }
 

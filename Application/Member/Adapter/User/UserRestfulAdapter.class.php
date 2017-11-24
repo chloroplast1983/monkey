@@ -16,7 +16,7 @@ class UserRestfulAdapter extends GuzzleAdapter implements IUserAdapter, IAsyncAd
 {
     private $translator;
 
-    private const SCENARIOS = [
+    const SCENARIOS = [
         'USERNAME'=>[
             'fields'=>['users'=>'userName']
         ]
@@ -56,7 +56,7 @@ class UserRestfulAdapter extends GuzzleAdapter implements IUserAdapter, IAsyncAd
             'users/'.implode(',', $ids)
         );
 
-        return $this->isSuccess() ? $this->translateToObjects : array();
+        return $this->isSuccess() ? $this->translateToObjects() : array();
     }
 
     public function search(
@@ -75,7 +75,7 @@ class UserRestfulAdapter extends GuzzleAdapter implements IUserAdapter, IAsyncAd
             )
         );
 
-        return $this->isSuccess() ? $this->translateToObjects : array();
+        return $this->isSuccess() ? $this->translateToObjects() : array();
     }
 
     public function fetchOneAsync(int $id)
@@ -144,10 +144,6 @@ class UserRestfulAdapter extends GuzzleAdapter implements IUserAdapter, IAsyncAd
         return $this->isSuccess() ? $this->translateToObject($user) : new NullUser();
     }
 
-    public function updatePassword(User $user) : bool
-    {
-    }
-
     protected function translateToObjects() : array
     {
         return $this->getTranslator()->arrayToObjects($this->getContents());
@@ -157,5 +153,4 @@ class UserRestfulAdapter extends GuzzleAdapter implements IUserAdapter, IAsyncAd
     {
         return $this->getTranslator()->arrayToObject($this->getContents(), $user);
     }
-
 }

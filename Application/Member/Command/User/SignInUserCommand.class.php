@@ -22,5 +22,3 @@ class SignInUserCommand implements ICommand
         $this->password = $password;
     }
 }
-
-

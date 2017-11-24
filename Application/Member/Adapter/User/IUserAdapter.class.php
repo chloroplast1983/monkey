@@ -13,8 +13,6 @@ interface IUserAdapter
     
     public function signIn(User $user) : User;
 
-    public function updatePassword(User $user) : bool;
-
     public function search(
         array $filter = array(),
         array $sort = array(),

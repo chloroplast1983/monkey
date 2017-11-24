@@ -26,6 +26,10 @@ class UserRestfulTranslator extends Translator
         return [$expression['data']['id']=>$this->translateToObject($expression['data'])];
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     */
     private function translateToObject(array $expression, $user = null)
     {
         $id = $expression['id'];

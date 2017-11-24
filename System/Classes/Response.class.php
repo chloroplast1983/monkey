@@ -2,30 +2,30 @@
 //powered by chloroplast
 namespace System\Classes;
 
+use System\Interfaces\IView;
+
 use Marmot\Core;
 
 class Response
 {
+    //这里预留输出response的header
+
     private $view;
 
-    public function __construct()
-    {
-        $this->view = new \SmartyBC;
-        $this->view->setTemplateDir(S_ROOT.'View/Smarty/Templates');
-        $this->view->setCompileDir(S_ROOT.'View/Smarty/Compile');
-        $this->view->setConfigDir(S_ROOT.'View/Smarty/Config');
-        $this->view->setCacheDir(S_ROOT.'View/Smarty/Cache');
-        $this->view->setPluginsDir(S_ROOT.'View/Smarty/Plugins');
-    }
-
-    public function view()
+    protected function getView() : IView
     {
         return $this->view;
     }
 
-    public function jsonOut($data)
+    public function view(IView $view) : self
     {
-        echo json_encode($data);
-        exit();
+        $this->view = $view;
+        return $this;
+    }
+
+    public function render() : void
+    {
+        //其他输出
+        $this->getView()->render();
     }
 }

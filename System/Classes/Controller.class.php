@@ -4,6 +4,8 @@ namespace System\Classes;
 
 use Marmot\Core;
 use System\Interfaces\IView;
+use System\View\ErrorJsonView;
+use System\View\ErrorTemplateView;
 
 /**
  * 应用层服务父类,控制应用服务层的 Request 和 Reponse
@@ -55,18 +57,11 @@ abstract class Controller
         return $this->response;
     }
 
-   /**
-     * 渲染输出内容
-     * @var array|string 输出源内容
-     */
-    public function render($data = '')
-    {
-        $this->getResponse()->data = $data;
-        return $this->getResponse()->send();
-    }
-
     public function displayError()
     {
+        $this->getRequest()->isAjax() ?
+        $this->getResponse()->view(new ErrorJsonView())->render() :
+        $this->getResponse()->view(new ErrorTemplateView())->render();
     }
 
     public function error()

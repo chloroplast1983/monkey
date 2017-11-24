@@ -38,10 +38,6 @@ class Core
     private static $lastError;
 
     private $global;
-    
-    private function __construct()
-    {
-    }
 
     /**
      * 使用单例封装全局函数的core调用
