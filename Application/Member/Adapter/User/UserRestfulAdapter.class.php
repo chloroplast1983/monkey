@@ -75,7 +75,7 @@ class UserRestfulAdapter extends GuzzleAdapter implements IUserAdapter, IAsyncAd
             )
         );
 
-        return $this->isSuccess() ? $this->translateToObjects() : array();
+        return $this->isSuccess() ? $this->translateToObjects() : array(0, array());
     }
 
     public function fetchOneAsync(int $id)

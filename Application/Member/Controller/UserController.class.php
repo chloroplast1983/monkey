@@ -26,7 +26,8 @@ class UserController extends Controller
 //
 //        var_dump('no user');
         $repository = new UserRepository();
-        $users = $repository->fetchList(array(1,2,3));
+        list($count, $users) = $repository->fetchList(array(1,2,3));
+        unset($count);
         $this->getResponse()->view(new UserListView($users))->render();
         return true;
     }

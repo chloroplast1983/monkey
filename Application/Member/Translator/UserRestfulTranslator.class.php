@@ -15,15 +15,17 @@ class UserRestfulTranslator extends Translator
     public function arrayToObjects(array $expression) : array
     {
         if (isset($expression['data'][0])) {
+
             $results = array();
             foreach ($expression['data'] as $each) {
                 $results[$each['id']] = $this->translateToObject($each);
             }
 
-            return $results;
+            $count = isset($expression['meta']['count']) ? $expression['meta']['count'] : sizeof($results);
+            return [$count, $results];
         }
 
-        return [$expression['data']['id']=>$this->translateToObject($expression['data'])];
+        return [1, [$expression['data']['id']=>$this->translateToObject($expression['data'])]];
     }
 
     /**
