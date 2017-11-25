@@ -45,7 +45,6 @@ class IndexController extends Controller
         //var_dump($userOne);
         //exit();
 //
-        $this->getResponse()->view()->display('Home/index.tpl');
         return true;
     }
 }

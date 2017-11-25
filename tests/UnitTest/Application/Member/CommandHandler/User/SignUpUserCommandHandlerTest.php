@@ -1,7 +1,7 @@
 <?php
 namespace Member\CommandHandler\User;
 
-use tests\GenericTestCase;
+use PHPUnit\Framework\TestCase;
 use System\Interfaces\ICommand;
 
 use Member\Model\User;
@@ -9,7 +9,7 @@ use Member\Command\User\SignUpUserCommand;
 
 use Prophecy\Argument;
 
-class SignUpUserCommandHandlerTest extends GenericTestCase
+class SignUpUserCommandHandlerTest extends TestCase
 {
     /**
      * 1. 声明一个SignUpUserCommand命令

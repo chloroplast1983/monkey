@@ -6,10 +6,6 @@ return [
     'cookie.duration'   => 3600,
     'cookie.name'       => 'marmot',
     'cookie.encrypt.key' => 'marmot',
-    //static url
-    'static.img.url' => 'img',
-    'static.css.url' => 'css',
-    'static.js.url' => 'js',
     //services
     'services.user.url' => 'http://marmot-backend/',
     //cache

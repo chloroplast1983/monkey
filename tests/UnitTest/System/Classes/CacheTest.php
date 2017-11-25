@@ -1,6 +1,7 @@
 <?php
 namespace System\Classes;
 
+use PHPUnit\Framework\TestCase;
 use Marmot\Core;
 
 /**
@@ -15,7 +16,7 @@ use Marmot\Core;
  * @author chloroplast
  * @version 1.0.20160218
  */
-class CacheTest extends \PHPUnit_Framework_TestCase
+class CacheTest extends TestCase
 {
 
     private $stub;
