@@ -45,6 +45,7 @@ class IndexController extends Controller
         //var_dump($userOne);
         //exit();
 //
+        var_dump('Hello World marmot');
         return true;
     }
 }

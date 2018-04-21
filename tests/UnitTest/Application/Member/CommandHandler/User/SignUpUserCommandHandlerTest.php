@@ -11,6 +11,37 @@ use Prophecy\Argument;
 
 class SignUpUserCommandHandlerTest extends TestCase
 {
+    private $stub;
+    private $childStub;
+
+    public function setUp()
+    {
+        $this->stub = $this->getMockBuilder(SignUpUserCommandHandler::class)
+            ->setMethods(['getCrew','getUserGroupRepository'])
+            ->getMock();
+
+        $this->childStub = new class extends SignUpUserCommandHandler{
+            public function getUser() : User
+            {
+                return parent::getUser();
+            }
+        };
+    }
+
+    public function tearDown()
+    {
+        unset($this->stub);
+        unset($this->childStub);
+    }
+
+    public function testGetUser()
+    {
+        $this->assertInstanceOf(
+            'Member\Model\User',
+            $this->childStub->getUser()
+        );
+    }
+
     /**
      * 1. 声明一个SignUpUserCommand命令
      * 2. 预测一个用户对象

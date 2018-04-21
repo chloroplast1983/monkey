@@ -16,6 +16,7 @@ use Member\CommandHandler\User\UserCommandHandlerFactory;
 use Member\Model\User;
 
 use Member\View\Template\SignUpView;
+use Member\View\Template\SignInView;
 
 use WidgetRules\Common\InputWidgetRules;
 
@@ -89,7 +90,7 @@ class UserSignController extends Controller
 
     protected function signInView() : bool
     {
-        $this->getResponse()->view()->display('User/SignIn.tpl');
+        $this->getResponse()->view(new SignInView())->render();
         return true;
     }
 
@@ -124,6 +125,7 @@ class UserSignController extends Controller
         string $password,
         string $phrase
     ) {
+        return true;
         return $this->validateCsrfToken()
             && $this->validateCaptcha($phrase)
             && InputWidgetRules::cellphone($cellphone)

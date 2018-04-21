@@ -3,6 +3,7 @@ namespace Member\Adapter\User;
 
 use System\Adapter\Restful\GuzzleAdapter;
 use System\Interfaces\IAsyncAdapter;
+use System\Classes\Translator;
 
 use Marmot\Core;
 use Member\Translator\UserRestfulTranslator;
@@ -36,7 +37,7 @@ class UserRestfulAdapter extends GuzzleAdapter implements IUserAdapter, IAsyncAd
         $this->scenario = isset(self::SCENARIOS[$scenario]) ? self::SCENARIOS[$scenario] : array();
     }
 
-    protected function getTranslator()
+    protected function getTranslator() : Translator
     {
         return $this->translator;
     }

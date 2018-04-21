@@ -15,7 +15,6 @@ class UserRestfulTranslator extends Translator
     public function arrayToObjects(array $expression) : array
     {
         if (isset($expression['data'][0])) {
-
             $results = array();
             foreach ($expression['data'] as $each) {
                 $results[$each['id']] = $this->translateToObject($each);
@@ -47,6 +46,9 @@ class UserRestfulTranslator extends Translator
             $user->setCellphone($attributes['cellphone']);
         }
 
+        if (isset($attributes['password'])) {
+            $user->setPassword($attributes['password']);
+        }
         if (isset($attributes['createTime'])) {
             $user->setCreateTime($attributes['createTime']);
         }

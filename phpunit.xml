@@ -28,6 +28,7 @@
     <filter>
         <whitelist processUncoveredFilesFromWhitelist="true">
             <directory suffix=".php">./System/</directory>
+            <directory suffix=".php">./Application/</directory>
         </whitelist>
     </filter>
 

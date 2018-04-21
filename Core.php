@@ -162,7 +162,7 @@ class Core
      */
     private function initEnv()
     {
-        session_start();
+        // session_start();
         Core::$container->set('time', time());
         //加载应用配置文件
         include S_ROOT.'Application/config.php';

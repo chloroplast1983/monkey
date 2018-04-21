@@ -1,7 +1,7 @@
 nginx: 
   image: "registry.cn-hangzhou.aliyuncs.com/nginx-phpfpm/nginx-front"
   ports:
-   - "80:80"
+   - "81:80"
   links:
    - "phpfpm"
   volumes:
@@ -13,10 +13,10 @@ phpfpm:
   volumes:
    - ./:/var/www/html/
   links:
-    - "memcached_session_1"
-    - "memcached_session_2"
-    - "memcached_data_1"
-    - "memcached_data_2"
+    - "memcached-session-1"
+    - "memcached-session-2"
+    - "memcached-data-1"
+    - "memcached-data-2"
   external_links:
    - "marmot-nginx:marmot-backend"
   environment:
@@ -25,19 +25,19 @@ phpfpm:
     - SYS_PTRACE
   container_name: monkey-phpfpm
 
-memcached_session_1:
+memcached-session-1:
   image: "registry.aliyuncs.com/marmot/memcached:1.0"
   command: memcached -m 32
 
-memcached_session_2:
+memcached-session-2:
   image: "registry.aliyuncs.com/marmot/memcached:1.0"
   command: memcached -m 32
 
-memcached_data_1:
+memcached-data-1:
   image: "registry.aliyuncs.com/marmot/memcached:1.0"
   command: memcached -m 32
 
-memcached_data_2:
+memcached-data-2:
   image: "registry.aliyuncs.com/marmot/memcached:1.0"
   command: memcached -m 32
 

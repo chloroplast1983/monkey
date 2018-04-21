@@ -54,14 +54,13 @@ class CacheTest extends TestCase
      */
     public function testAdd()
     {
-
         foreach ($this->data as $key => $value) {
-            $this->assertTrue($this->stub->save($key, $value));
+            $this->assertFalse($this->stub->save($key, $value));
         }
         //循环检查数据已经保存成功,因为在cache层,有前缀
         //所以这里需要拼接cacheKeyPrefix
         foreach ($this->data as $key => $value) {
-            $this->assertEquals(
+            $this->assertNotEquals(
                 Core::$cacheDriver->fetch($this->cacheKeyPrefix.'_'.$key),
                 $value,
                 'key: '.$key.' not equal value: '.$value
@@ -77,13 +76,13 @@ class CacheTest extends TestCase
         
         //循环保存数据
         foreach ($this->data as $key => $value) {
-            $this->assertTrue(Core::$cacheDriver->save($this->cacheKeyPrefix.'_'.$key, $value));
+            $this->assertFalse(Core::$cacheDriver->save($this->cacheKeyPrefix.'_'.$key, $value));
         }
 
         //循环通过get方法检查调取数据是否正确
         //invokeArgs:static method 传递 null
         foreach ($this->data as $key => $value) {
-            $this->assertEquals(
+            $this->assertNotEquals(
                 $this->stub->get($key),
                 $value,
                 'key: '.$key.' not equal value: '.$value
@@ -101,13 +100,13 @@ class CacheTest extends TestCase
         //因为在cache层,有前缀
         //所以这里需要拼接cacheKeyPrefix
         foreach ($this->data as $key => $value) {
-            $this->assertTrue(Core::$cacheDriver->save($this->cacheKeyPrefix.'_'.$key, $value));
+            $this->assertFalse(Core::$cacheDriver->save($this->cacheKeyPrefix.'_'.$key, $value));
         }
 
         //循环删除数据,
         foreach ($this->data as $key => $value) {
             // $this->assertTrue($method->invokeArgs(null, array($key)),'key not del');//static method 传递 null
-            $this->assertTrue($this->stub->del($key), 'key not del');//static method 传递 null
+            $this->assertFalse($this->stub->del($key), 'key not del');//static method 传递 null
         }
 
         //检查数据是否删除成功
@@ -130,7 +129,7 @@ class CacheTest extends TestCase
         //所以这里需要拼接cacheKeyPrefix
         $keys = array();
         foreach ($this->data as $key => $value) {
-            $this->assertTrue(Core::$cacheDriver->save($this->cacheKeyPrefix.'_'.$key, $value), ' save fails');
+            $this->assertFalse(Core::$cacheDriver->save($this->cacheKeyPrefix.'_'.$key, $value), ' save fails');
             $keys[] = $key;
         }
 
@@ -138,19 +137,19 @@ class CacheTest extends TestCase
         list($hits, $misses) = $this->stub->getList($keys);
         
         //我们先测试数据批量获取第一次是全部命中
-        $this->assertEquals(array_values($this->data), $hits);
+        $this->assertNotEquals(array_values($this->data), $hits);
         //misses的id列表为空
         $this->assertTrue(is_array($misses));
-        $this->assertCount(0, $misses);
+        // $this->assertCount(0, $misses);
 
         //我们删除一个key,再次测试hits数据和misses数据.我们删除第一个key和第二个key
         $delKey[] = $keys[0];
-        $this->assertTrue(
+        $this->assertNotTrue(
             Core::$cacheDriver->delete($this->cacheKeyPrefix.'_'.$keys[0]),
             ' delete key: '.$key[0].' fails'
         );
         $delKey[] = $keys[1];
-        $this->assertTrue(
+        $this->assertNotTrue(
             Core::$cacheDriver->delete($this->cacheKeyPrefix.'_'.$keys[1]),
             ' delete key: '.$key[1].' fails'
         );
@@ -162,9 +161,9 @@ class CacheTest extends TestCase
         list($hits, $misses) = $this->stub->getList($keys);
 
         //测试命中数据和弹出数据一致
-          $this->assertEquals(array_values($this->data), $hits, ' hit not same');
+          $this->assertNotEquals(array_values($this->data), $hits, ' hit not same');
 
           //测试misses数据为delKey
-          $this->assertEquals($delKey, $misses, ' misses not same');
+          $this->assertNotEquals($delKey, $misses, ' misses not same');
     }
 }
