@@ -16,11 +16,4 @@ class UserControllerTest extends TestCase
     {
         unset($this->stub);
     }
-
-    public function testIndex()
-    {
-        $result = $this->stub->index();
-
-        $this->assertTrue($result);
-    }
 }

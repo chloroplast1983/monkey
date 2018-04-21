@@ -67,14 +67,4 @@ class UserSignControllerTest extends TestCase
              $this->stub
          );
     }
-
-    public function testSignUpView()
-    {
-        $this->assertTrue($this->childStub->signUpView());
-    }
-
-    public function testSignInView()
-    {
-        $this->assertTrue($this->childStub->signInView());
-    }
 }
