@@ -50,4 +50,7 @@ return [
     //Query
     'System\Query\FragmentCacheQuery' => S_ROOT.'System/Query/FragmentCacheQuery.class.php',
     'System\Query\DataCacheQuery' => S_ROOT.'System/Query/DataCacheQuery.class.php',
+
+    //extension
+    'System\Extension\Monolog\FluentdHandler' => S_ROOT.'System/Extension/Monolog/FluentdHandler.class.php',
 ];
