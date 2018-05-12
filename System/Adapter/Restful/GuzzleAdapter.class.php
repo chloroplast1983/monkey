@@ -2,13 +2,15 @@
 namespace System\Adapter\Restful;
 
 use System\Classes\Server;
+use System\Classes\Translator;
 
 use GuzzleHttp;
 use GuzzleHttp\Exception\RequestException;
 
+use Marmot\Core;
+
 abstract class GuzzleAdapter
 {
-
     private $client;
 
     protected $scenario;
@@ -45,6 +47,10 @@ abstract class GuzzleAdapter
         unset($this->responseHeaders);
     }
 
+    abstract protected function getTranslator() : Translator;
+
+    abstract public function scenario($scenario) : void;
+
     protected function getClient()
     {
         return $this->client;
@@ -67,7 +73,12 @@ abstract class GuzzleAdapter
 
     protected function getContents() : array
     {
-        return !empty($this->contents) ? json_decode($this->contents, true) : array();
+        $contents = '';
+
+        if (!empty($this->contents)) {
+            $contents = json_decode($this->contents, true);
+        }
+        return is_array($contents) ? $contents : array();
     }
 
     protected function setRequestHeaders(array $requestHeaders) : void
@@ -96,7 +107,7 @@ abstract class GuzzleAdapter
         $query = array_merge($this->getScenario(), $query);
 
         $this->clearScenario();
-    
+
         try {
             $response = $this->getClient()->get(
                 $url,
@@ -134,6 +145,25 @@ abstract class GuzzleAdapter
 
         try {
             $response = $this->getClient()->put(
+                $url,
+                [
+                    'headers'=>$requestHeaders,
+                    'json'=>$data
+                ]
+            );
+        } catch (RequestException $e) {
+            //log
+            $response = new NullResponse();
+        }
+        $this->formatResponse($response);
+    }
+
+    protected function patch(string $url, array $data = array(), array $requestHeaders = array())
+    {
+        $requestHeaders = array_merge($requestHeaders, $this->getRequestHeaders());
+
+        try {
+            $response = $this->getClient()->patch(
                 $url,
                 [
                     'headers'=>$requestHeaders,
@@ -187,7 +217,27 @@ abstract class GuzzleAdapter
 
     protected function isSuccess() : bool
     {
-        return ($this->getStatusCode() >= 200 && $this->getStatusCode() < 300);
+        if ($this->getStatusCode() >= 200 && $this->getStatusCode() < 300) {
+            return true;
+        }
+        $this->translatError();
+        return false;
+    }
+
+    protected function translatError()
+    {
+        $id = $this->getErrorId();
+        $apiErrors = include_once S_ROOT.'Application/apiErrorConfig.php';
+        if (isset($apiErrors[$id])) {
+            Core::setLastError($apiErrors[$id]);
+        }
+    }
+
+    private function getErrorId()
+    {
+        $contents = $this->getContents();
+
+        return isset($contents['errors']) ? $contents['errors'][0]['id'] : 0;
     }
 
     protected function isCached() : bool
@@ -212,13 +262,17 @@ abstract class GuzzleAdapter
         $this->setResponseHeaders($response->getHeaders());
     }
 
-    abstract protected function translateToObject($object = null);
+    protected function translateToObject($object = null)
+    {
+        return $this->getTranslator()->arrayToObject($this->getContents(), $object);
+    }
 
-    abstract protected function translateToObjects();
+    protected function translateToObjects()
+    {
+        return $this->getTranslator()->arrayToObjects($this->getContents());
+    }
 
-    abstract public function scenario($scenario) : void;
-
-    private function getScenario() : array
+    protected function getScenario() : array
     {
         return $this->scenario;
     }
@@ -235,7 +289,7 @@ abstract class GuzzleAdapter
         $this->setResponseHeaders($responseHeaders);
 
         if ($this->isSuccess()) {
-            return $this->translate();
+            return $this->translateToObjects();
         }
         return '';
     }

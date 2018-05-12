@@ -65,10 +65,10 @@ class Filter
             }
         } else {
             if (!$flags) {
-                $string = str_replace(array('&', '"', '<', '>'), array('&amp;', '&quot;', '&lt;', '&gt;'), $string);
                 if (strpos($string, '&amp;#') !== false) {
                     $string = preg_replace('/&amp;((#(\d{3,5}|x[a-fA-F0-9]{4}));)/', '&\\1', $string);
                 }
+                $string = str_replace(array('&amp;', '&quot;', '&lt;', '&gt;'), array('&', '"', '<', '>'), $string);
             } else {
                 $string = htmlspecialchars($string, $flags);
             }
@@ -140,7 +140,7 @@ class Filter
             $allowattributes = 'target,src,width,height,alt,title,size,face,color,align,style,class,rel,rev';
             $html = Filter::stripTagsAttributesPlus($html, $allowtags, $allowattributes);
             
-            $html = Filter::dhtmlspecialchars($html);
+            $html = Filter::htmlspecialcharsPlus($html);
             $html = Filter::addslashesPlus($html);
         }
         return $html;

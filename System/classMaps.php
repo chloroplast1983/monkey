@@ -44,6 +44,8 @@ return [
     'System\View\TemplateView' => S_ROOT.'System/View/TemplateView.class.php',
     'System\View\ErrorTemplateView' => S_ROOT.'System/View/ErrorTemplateView.class.php',
     'System\View\ErrorJsonView' => S_ROOT.'System/View/ErrorJsonView.class.php',
+    'System\View\SuccessTemplateView' => S_ROOT.'System/View/SuccessTemplateView.class.php',
+    'System\View\SuccessJsonView' => S_ROOT.'System/View/SuccessJsonView.class.php',
     'System\View\JsonView' => S_ROOT.'System/View/JsonView.class.php',
     'System\View\Smarty' => S_ROOT.'System/View/Smarty.class.php',
 

@@ -11,5 +11,5 @@ return [
     //cache
     'cache.route.disable' => true,
     //memcached
-    'memcached.serevice'=>[['memcached_data_1',11211],['memcached_data_2',11211]],
+    'memcached.serevice'=>[['memcached-data-1',11211],['memcached-data-2',11211]],
 ];
