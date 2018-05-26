@@ -60,9 +60,9 @@ class Core
         self::initContainer();//引入容器
         self::initCache();//初始化缓存使用
         self::initEnv();//初始化环境
+        self::initError();
         // self::initMongo();
         self::initUser();
-        self::initError();
         self::initRoute();
     }
 
