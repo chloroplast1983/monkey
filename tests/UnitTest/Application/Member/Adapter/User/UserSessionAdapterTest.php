@@ -42,6 +42,11 @@ class UserSessionAdapterTest extends TestCase
             {
                 return parent::getTranslator();
             }
+
+            public function getTTL() : int
+            {
+                return parent::getTTL();
+            }
         };
     }
 
@@ -106,7 +111,7 @@ class UserSessionAdapterTest extends TestCase
         $session->save(
             Argument::exact($crew->getId()),
             Argument::exact($infoArray),
-            Argument::exact(UserSessionAdapter::SESSION_LIVE_TIME)
+            Argument::exact($this->childStub->getTTL())
         )->shouldBeCalledTimes(1)->willReturn(true);
 
         $this->stub->expects($this->exactly(1))
@@ -134,7 +139,7 @@ class UserSessionAdapterTest extends TestCase
         $session->save(
             Argument::exact($crew->getId()),
             Argument::exact($infoArray),
-            Argument::exact(UserSessionAdapter::SESSION_LIVE_TIME)
+            Argument::exact($this->childStub->getTTL())
         )->shouldBeCalledTimes(1)->willReturn(false);
 
         $this->stub->expects($this->exactly(1))

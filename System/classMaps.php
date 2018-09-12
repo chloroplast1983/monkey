@@ -22,6 +22,27 @@ return [
     S_ROOT.'System/Adapter/Restful/GuzzleConcurrentAdapter.class.php',
     'System\Adapter\Restful\GuzzleAdapter' => S_ROOT.'System/Adapter/Restful/GuzzleAdapter.class.php',
     'System\Adapter\Restful\NullResponse' => S_ROOT.'System/Adapter/Restful/NullResponse.class.php',
+    'System\Adapter\Restful\CacheResponse' => S_ROOT.'System/Adapter/Restful/CacheResponse.class.php',
+    //adapter.adapter
+    'System\Adapter\Restful\Adapter\CacheResponse\ICacheResponseAdapter' =>
+    S_ROOT.'System/Adapter/Restful/Adapter/CacheResponse/ICacheResponseAdapter.class.php',
+    'System\Adapter\Restful\Adapter\CacheResponse\Query\CacheResponseDataCacheQuery' =>
+    S_ROOT.'System/Adapter/Restful/Adapter/CacheResponse/Query/CacheResponseDataCacheQuery.class.php',
+    'System\Adapter\Restful\Adapter\CacheResponse\Query\Persistence\CacheResponseCache' =>
+    S_ROOT.'System/Adapter/Restful/Adapter/CacheResponse/Query/Persistence/CacheResponseCache.class.php',
+    'System\Adapter\Restful\Adapter\CacheResponse\CacheResponseCacheAdapter' =>
+    S_ROOT.'System/Adapter/Restful/Adapter/CacheResponse/CacheResponseCacheAdapter.class.php',
+    //adapter.translator
+    'System\Adapter\Restful\Translator\CacheResponseTranslator' =>
+    S_ROOT.'System/Adapter/Restful/Translator/CacheResponseTranslator.class.php',
+    //adapter.respository
+    'System\Adapter\Restful\Repository\CacheResponseRepository' =>
+    S_ROOT.'System/Adapter/Restful/Repository/CacheResponseRepository.class.php',
+    //adapter.strategy
+    'System\Adapter\Restful\Strategy\PeriodCacheStrategy' =>
+    S_ROOT.'System/Adapter/Restful/Strategy/PeriodCacheStrategy.class.php',
+    'System\Adapter\Restful\Strategy\EtagCacheStrategy' =>
+    S_ROOT.'System/Adapter/Restful/Strategy/EtagCacheStrategy.class.php',
 
     //command
     'System\Command\Cache\SaveCacheCommand' => S_ROOT.'System/Command/Cache/SaveCacheCommand.class.php',

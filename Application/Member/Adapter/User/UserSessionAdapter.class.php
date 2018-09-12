@@ -13,12 +13,15 @@ class UserSessionAdapter
     private $session;
     private $translator;
 
-    const SESSION_LIVE_TIME = 300;
-
     public function __construct()
     {
         $this->session = new UserSessionDataCacheQuery();
         $this->translator = new UserSessionTranslator();
+    }
+
+    protected function getTTL() : int
+    {
+        return Core::$container->has('cache.session.ttl') ? Core::$container->get('cache.session.ttl') : 300;
     }
 
     protected function getSession() : UserSessionDataCacheQuery
@@ -42,7 +45,7 @@ class UserSessionAdapter
     {
         $info = $this->getTranslator()->objectToArray($user);
 
-        return $this->getSession()->save($user->getId(), $info, self::SESSION_LIVE_TIME);
+        return $this->getSession()->save($user->getId(), $info, $this->getTTL());
     }
 
     public function del(int $id) : bool

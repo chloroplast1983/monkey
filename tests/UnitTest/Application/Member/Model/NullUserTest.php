@@ -15,6 +15,14 @@ class NullUserTest extends TestCase
         $this->stub = new NullUser();
     }
 
+    public function testImplementINull()
+    {
+        $this->assertInstanceOf(
+            'System\Interfaces\INull',
+            $this->stub
+        );
+    }
+
     public function testSignUp()
     {
         $this->assertFalse($this->stub->signUp());

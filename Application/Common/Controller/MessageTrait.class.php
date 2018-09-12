@@ -5,7 +5,7 @@ use Common\View\MessageView;
 
 trait MessageTrait
 {
-    public function message(string $title, string $message, string $urlForward) : bool
+    public function message(string $title, string $message, string $urlForward = '') : bool
     {
         if (!empty($urlForward)) {
             $second = 5 * 1000;

@@ -2,7 +2,7 @@
 namespace System\Query;
 
 use System\Classes;
-use System\Interfaces;
+use System\Interfaces\CacheLayer;
 
 /**
  * DataCacheQuery文件,abstract抽象类.针对单独的数据缓存抽象类
@@ -15,7 +15,7 @@ abstract class DataCacheQuery
 
     private $cacheLayer;//缓存层
 
-    public function __construct(Interfaces\CacheLayer $cacheLayer)
+    public function __construct(CacheLayer $cacheLayer)
     {
         $this->cacheLayer = $cacheLayer;
     }
@@ -25,17 +25,22 @@ abstract class DataCacheQuery
         unset($this->dbLayer);
     }
 
+    protected function getCacheLayer() : CacheLayer
+    {
+        return $this->cacheLayer;
+    }
+
     /**
      * 保存数据
      * @param string $key 键名
-     * @param string $data 数据
+     * @param $data 数据
      * @param int $ttl Time To Live
      *
      * @return bool true|false
      */
-    public function save($key, $data, $ttl = 0)
+    public function save(string $key, $data, $ttl = 0)
     {
-        return $this->cacheLayer->save($key, $data, $ttl);
+        return $this->getCacheLayer()->save($key, $data, $ttl);
     }
 
     /**
@@ -44,9 +49,9 @@ abstract class DataCacheQuery
      *
      * @return bool true|false
      */
-    public function del($key)
+    public function del(string $key)
     {
-        return $this->cacheLayer->del($key);
+        return $this->getCacheLayer()->del($key);
     }
 
     /**
@@ -57,6 +62,6 @@ abstract class DataCacheQuery
      */
     public function get(string $key)
     {
-        return $this->cacheLayer->get($key);
+        return $this->getCacheLayer()->get($key);
     }
 }

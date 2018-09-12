@@ -60,7 +60,7 @@ class UserSignControllerTest extends TestCase
         unset($this->childStub);
     }
 
-    public function tesExtendsController()
+    public function testExtendsController()
     {
          $this->assertInstanceOf(
              'System\Classes\Controller',

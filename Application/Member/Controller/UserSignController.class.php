@@ -60,7 +60,7 @@ class UserSignController extends Controller
                 $password
             );
             if ($commandBus->send($command)) {
-                $this->message();
+                $this->message('sign up success', 'sign up success');
             }
         }
 

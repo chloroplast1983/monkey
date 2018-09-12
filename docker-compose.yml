@@ -17,8 +17,8 @@ phpfpm:
     - "memcached-session-2"
     - "memcached-data-1"
     - "memcached-data-2"
-#  external_links:
-#   - "marmot-nginx:marmot-backend"
+  external_links:
+   - "marmot-nginx:marmot-backend"
   environment:
    - APP_ENV=dev
   cap_add:

@@ -16,4 +16,10 @@ class UserControllerTest extends TestCase
     {
         unset($this->stub);
     }
+
+    public function testCorrectExtendsController()
+    {
+        $controller = new UserController();
+        $this->assertInstanceof('System\Classes\Controller', $controller);
+    }
 }

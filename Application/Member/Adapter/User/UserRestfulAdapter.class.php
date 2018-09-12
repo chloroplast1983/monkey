@@ -4,6 +4,8 @@ namespace Member\Adapter\User;
 use System\Adapter\Restful\GuzzleAdapter;
 use System\Interfaces\IAsyncAdapter;
 use System\Classes\Translator;
+use System\Adapter\Restful\Strategy\EtagCacheStrategy;
+use System\Adapter\Restful\Strategy\PeriodCacheStrategy;
 
 use Marmot\Core;
 use Member\Translator\UserRestfulTranslator;
@@ -15,6 +17,9 @@ use Member\Model\NullUser;
  */
 class UserRestfulAdapter extends GuzzleAdapter implements IUserAdapter, IAsyncAdapter
 {
+//    use EtagCacheStrategy;
+//    use PeriodCacheStrategy;
+
     private $translator;
 
     const SCENARIOS = [

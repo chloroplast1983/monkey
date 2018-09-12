@@ -20,12 +20,6 @@ class UserController extends Controller
 
     public function index()
     {
-//        if (Core::$container->has('user')) {
-//            var_dump(Core::$container->get('user'));
-//        }
-//
-//        var_dump('no user');
-        
         $this->getResponse()->view(new UserListView())->render();
         return true;
     }

@@ -3,6 +3,8 @@ namespace System\Adapter\Restful;
 
 use System\Classes\Server;
 use System\Classes\Translator;
+use System\Interfaces\INull;
+use System\Adapter\Restful\Repository\CacheResponseRepository;
 
 use GuzzleHttp;
 use GuzzleHttp\Exception\RequestException;
@@ -23,14 +25,22 @@ abstract class GuzzleAdapter
 
     protected $requestHeaders;
 
+    private $cacheResponseRepository;
+
     public function __construct(string $baseurl)
     {
+        $options = [
+            'base_uri'=>$baseurl,
+            'http_errors'=>false,
+            'timeout'=>5
+        ];
+
+        if (Core::$container->has('guzzle.handler')) {
+            $options['handler'] = Core::$container->get('guzzle.handler');
+        }
+
         $this->client = new GuzzleHttp\Client(
-            [
-             'base_uri'=>$baseurl,
-             'http_errors'=>false,
-             'timeout'=>5
-            ]
+            $options
         );
 
         $this->requstHeaders = [
@@ -38,6 +48,8 @@ abstract class GuzzleAdapter
             'Accept'=>'application/vnd.api+json',
             'Request-Id'=>Server::get('REQUEST_ID', '')
         ];
+
+        $this->cacheResponseRepository = new CacheResponseRepository();
     }
 
     public function __destruct()
@@ -45,11 +57,17 @@ abstract class GuzzleAdapter
         unset($this->client);
         unset($this->requstHeaders);
         unset($this->responseHeaders);
+        unset($this->cacheResponseRepository);
     }
 
     abstract protected function getTranslator() : Translator;
 
     abstract public function scenario($scenario) : void;
+
+    protected function getCacheResponseRepository() : CacheResponseRepository
+    {
+        return $this->cacheResponseRepository;
+    }
 
     protected function getClient()
     {
@@ -98,10 +116,16 @@ abstract class GuzzleAdapter
 
     protected function getResponseHeaders(array $responseHeaders) : array
     {
-        return $this->getRequestHeaders();
+        return $this->responseHeaders;
     }
 
     protected function get(string $url, array $query = array(), array $requestHeaders = array())
+    {
+        $response = $this->getResponse($url, $query, $requestHeaders);
+        $this->formatResponse($response);
+    }
+
+    protected function getResponse(string $url, array $query = array(), array $requestHeaders = array())
     {
         $requestHeaders = array_merge($requestHeaders, $this->getRequestHeaders());
         $query = array_merge($this->getScenario(), $query);
@@ -120,10 +144,16 @@ abstract class GuzzleAdapter
             //log
             $response = new NullResponse();
         }
-        $this->formatResponse($response);
+
+        return $response;
     }
 
     protected function getAsync(string $url, array $query = array(), array $requestHeaders = array())
+    {
+        return $this->getAsyncPromise($url, $query, $requestHeaders);
+    }
+
+    protected function getAsyncPromise(string $url, array $query = array(), array $requestHeaders = array())
     {
         $requestHeaders = array_merge($requestHeaders, $this->getRequestHeaders());
         $query = array_merge($this->getScenario(), $query);
